@@ -1,6 +1,27 @@
 import pygame
 from pygame.locals import *
 import sys
+from Codes import *
+from dataclasses import dataclass
+
+@dataclass 
+class Coordinate: #座標
+    x: float
+    y: float
+
+@dataclass 
+class Earthquake: #地震
+    magnitude: float        # マグニチュード
+    depth: float            # 深さ（km）
+    epicenter: Coordinate   # 震源地（座標）
+
+@dataclass
+class Panel: #パネル
+    position: Coordinate       # パネルの座標
+    has_building: bool         # 建物の有無
+    shaking: float             # 地震の揺れの大きさ（例：加速度や震度）
+    ground_strength: float     # 地盤の強さ（0〜1などで表現）
+    terrain_type: str          # 地形情報（例："hill", "plain", "coast", etc.）
 
 def main():
     pygame.init()                                   # Pygameの初期化
