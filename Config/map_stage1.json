@@ -1,0 +1,20 @@
+{
+    "sea": {
+      "type": "海",
+      "area": [[30, 35], [130, 135]],
+      "weakness": 0.9,
+      "disaster_risk": "津波"
+    },
+    "mountain": {
+      "type": "山",
+      "area": [[35, 40], [135, 140]],
+      "weakness": 0.7,
+      "disaster_risk": "土砂災害"
+    },
+    "flatland": {
+      "type": "平地",
+      "area": [[40, 45], [140, 145]],
+      "weakness": 0.5,
+      "disaster_risk": "液状化"
+    }
+}
