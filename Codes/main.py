@@ -17,11 +17,13 @@ class Earthquake: #地震
 
 @dataclass
 class Panel: #パネル
-    position: Coordinate       # パネルの座標
+    # position: Coordinate       # パネルの座標
     has_building: bool         # 建物の有無
     shaking: float             # 地震の揺れの大きさ（例：加速度や震度）
     ground_strength: float     # 地盤の強さ（0〜1などで表現）
     terrain_type: str          # 地形情報（例："hill", "plain", "coast", etc.）
+
+
 
 def main():
     pygame.init()                                   # Pygameの初期化
@@ -31,11 +33,16 @@ def main():
     # データ読み込み
     # TODO
 
+    
+    
+
     while (1): # メインループ
         # pygame.display.update()     # 画面を更新
         
         # シミュレータ起動
         # TODO
+        
+        EQSimulator(aaa)
         
         # イベント処理
         # for event in pygame.event.get():
