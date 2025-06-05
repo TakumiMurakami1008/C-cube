@@ -1,9 +1,11 @@
+# 仮作成
+# TODO: rho値
 {
-    "map_settings": { 
+    "map_settings": { # 緯度経度（実際のスケール）
         "latitude_range": [30, 45],
         "longitude_range": [130, 145]
     },
-    "epicenter_distribution": { 
+    "epicenter_distribution": { # 震源地確率分布の中心点と範囲のパラメータ
         "mean": [32.0, 138.0],
         "covariance": [[2.0, 0.0], [0.0, 2.0]]
     },

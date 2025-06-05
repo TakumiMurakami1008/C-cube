@@ -1,7 +1,10 @@
 import pygame
 from pygame.locals import *
+import numpy as np
 import sys
-from Codes import *
+from pathlib import Path
+import json
+
 from dataclasses import dataclass
 from EQSimulator import EQSimulatorVariableRho
 import PanelManager
@@ -29,44 +32,63 @@ class Panel: #パネル
 
 
 def main():
-    pygame.init()                                   # Pygameの初期化
-    screen = pygame.display.set_mode((400, 300))    # 400 x 300の大きさの画面を作る
-    pygame.display.set_caption("Game")              # 画面上部に表示するタイトルを設定
+    # pygame.init()                                   # Pygameの初期化
+    # screen = pygame.display.set_mode((400, 300))    # 400 x 300の大きさの画面を作る
+    # pygame.display.set_caption("Game")              # 画面上部に表示するタイトルを設定
 
     # データ読み込み
     # TODO
 
+    # while (1): # メインループ
+    # pygame.display.update()     # 画面を更新
     
+    # シミュレータ起動
+    # TODO
+
+    file_path = Path("../Config") / f"map_config.json"
+    # with open(f"map_stage{stage_num}.json", "r") as f:
+    with open(file_path, "r", encoding="utf-8_sig") as f:
+        map_data = json.load(f)
+        tile_width = map_data["tile_width"] 
+        tile_height = map_data["tile_width"] 
+
+    
+    sim = EQSimulatorVariableRho(
+            epicenter=(2, 5), #震源​
+            magnitude=10, #地震の規模​
+            grid_shape= (tile_width, tile_height),
+            rho_map=np.ones((tile_width, tile_height)), #地盤密度を持つ配列​
+            mu=1.0, #弾性係数​
+            dt=0.05
+        )
+    max_disp = sim.run(steps=100) #揺れの大きの最大値を持つ配列​
+
+    pane = PanelManager.PanelManager(
+        stage_num= 1, 
+        config_path = "../Config/map_config.json", # マップ共通のコンフィグを想定
+        grid_shape=(tile_width, tile_height), 
+        )
+    pane.simulate(max_disp = max_disp)
+    
+    import matplotlib.pyplot as plt
+    # プロット
+    plt.imshow(max_disp, cmap='viridis', interpolation='nearest')
+    plt.colorbar(label='Value')  # カラーバーを表示
+    plt.title('2D Array Visualization')
+    plt.xlabel('X-axis')
+    plt.ylabel('Y-axis')
+    plt.savefig("2d_array_visualization.png", dpi=300, bbox_inches='tight')  # 高解像度・余白調整付き
+    plt.show()
     
 
-    while (1): # メインループ
-        # pygame.display.update()     # 画面を更新
-        
-        # シミュレータ起動
-        # TODO
-        
-        sim = EQSimulatorVariableRho(
-                epicenter=(50, 50), #震源​
-                magnitude=10, #地震の規模​
-                grid_shape=(400, 300), #領域サイズ​
-                rho_map=rho, #地盤密度を持つ配列​
-                mu=1.0, #弾性係数​
-                dt=0.05
-            )
-        max_disp = sim.run(steps=100) #揺れの大きの最大値を持つ配列​
+    pane.showPanelState()
 
-        pane = PanelManager(
-            stage_num= 0, 
-            config_path = "../Config.map_config.json", # マップ共通のコンフィグを想定
-            grid_shape= (400, 300), 
-            )
-        panel_map = pane.simulate(max_disp = max_disp)
-        
-        # イベント処理
-        # for event in pygame.event.get():
-        #     if event.type == QUIT:  # 閉じるボタンが押されたら終了
-        #         pygame.quit()       # Pygameの終了(画面閉じられる)
-        #         sys.exit()
+
+    # イベント処理
+    # for event in pygame.event.get():
+    #     if event.type == QUIT:  # 閉じるボタンが押されたら終了
+    #         pygame.quit()       # Pygameの終了(画面閉じられる)
+    #         sys.exit()
 
 
 if __name__ == "__main__":

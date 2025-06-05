@@ -1,0 +1,6 @@
+{
+    "map_width": 15, # マップの広さ
+    "map_height": 15,
+    "tile_width":5, # タイル数
+    "tile_height":5
+}

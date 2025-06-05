@@ -1,6 +1,6 @@
 {
-    "map_width": 100, # タイル数イメージ
-    "map_height": 100,
-    "tile_width":2,
-    "tile_height":2
+    "map_width": 15, 
+    "map_height": 15,
+    "tile_width":10,
+    "tile_height":10
 }
