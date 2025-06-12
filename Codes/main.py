@@ -68,6 +68,7 @@ def main():
         config_path = "../Config/map_config.json", # マップ共通のコンフィグを想定
         grid_shape=(tile_width, tile_height), 
         )
+
     pane.simulate(max_disp = max_disp)
     
     import matplotlib.pyplot as plt
@@ -78,6 +79,7 @@ def main():
     plt.xlabel('X-axis')
     plt.ylabel('Y-axis')
     plt.savefig("2d_array_visualization.png", dpi=300, bbox_inches='tight')  # 高解像度・余白調整付き
+    # plt.savefig("2d_array_visualization.jpeg", dpi=300, bbox_inches='tight')
     plt.show()
     
 
