@@ -4,6 +4,7 @@ import numpy as np
 import sys
 from pathlib import Path
 import json
+import os
 
 from dataclasses import dataclass
 from EQSimulator import EQSimulatorVariableRho
@@ -45,13 +46,19 @@ def main():
     # シミュレータ起動
     # TODO
 
+    """
+    境界条件の都合で端っこの値は正しく使えないため、
+    ・シミュレーションの範囲をより広げて計算？
+    ・シミュレーションの範囲を大きく広げ震源を真ん中に設定してシミュ->シミュ後に座標を移動？
+    いずれにせよ、シミュレーションした範囲すべてを使うことはできないことに留意
+    """
+
     file_path = Path("../Config") / f"map_config.json"
     # with open(f"map_stage{stage_num}.json", "r") as f:
     with open(file_path, "r", encoding="utf-8_sig") as f:
         map_data = json.load(f)
         tile_width = map_data["tile_width"] 
         tile_height = map_data["tile_width"] 
-
     
     sim = EQSimulatorVariableRho(
             epicenter=(2, 5), #震源​
@@ -64,7 +71,7 @@ def main():
     max_disp = sim.run(steps=100) #揺れの大きの最大値を持つ配列​
 
     pane = PanelManager.PanelManager(
-        stage_num= 1, 
+        stage_num= 0, 
         config_path = "../Config/map_config.json", # マップ共通のコンフィグを想定
         grid_shape=(tile_width, tile_height), 
         )

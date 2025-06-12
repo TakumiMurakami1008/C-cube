@@ -1,11 +1,16 @@
 {
-    "map_settings": { 
-        "latitude_range": [30, 45],
-        "longitude_range": [130, 145]
+    "map_settings": {
+        "grid_size": { 
+            "width": 100,
+            "height": 100
+        },
+        "latitude_range": "[30, 45]",
+        "longitude_range": "[130, 145]"
     },
-    "epicenter_distribution": { 
-        "mean": [32.0, 138.0],
-        "covariance": [[2.0, 0.0], [0.0, 2.0]]
+    "epicenter_distribution": {
+        "mean": "[32.0, 138.0]",
+        "covariance": "[[2.0, 0.0], [0.0, 2.0]]",
+        "depth_range": "[0, 100]"
     },
     "magnitude_distribution": {
         "min": 6.0,
@@ -22,21 +27,24 @@
     "terrain": [
         {
             "type": "海",
-            "area": [[30, 35], [130, 145]],
+            "area": "[[30, 35], [130, 145]]",
             "weakness": 0.9,
-            "disaster_risk": "津波"
+            "disaster_risk": "津波",
+            "ground_type": "軟弱地盤"
         },
         {
             "type": "平地",
-            "area": [[35, 40], [130, 145]],
+            "area": "[[35, 40], [130, 145]]",
             "weakness": 0.7,
-            "disaster_risk": "液状化"
+            "disaster_risk": "液状化",
+            "ground_type": "沖積層"
         },
         {
             "type": "山",
-            "area": [[40, 45], [130, 145]],
+            "area": "[[40, 45], [130, 145]]",
             "weakness": 0.5,
-            "disaster_risk": "土砂災害"
+            "disaster_risk": "土砂災害",
+            "ground_type": "岩盤"
         }
     ]
-} 
+}

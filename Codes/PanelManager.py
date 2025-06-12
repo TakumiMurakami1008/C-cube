@@ -110,14 +110,16 @@ class PanelManager:
 
         return self.panels
     
-    def showPanelState(self, output_path="show_panel_state.json", show_limit=5):
+    def showPanelState(self, output_path="../Debug_folder/show_panel_state.json", show_limit=5):
         """
-        パネルの状態をコンソールに表示するか、ファイルに出力
-        - output_path: ファイルパスを指定するとJSONで出力
-        - limit: コンソール出力の最大表示行数（多すぎると見づらくなるため）
+        パネルの状態をファイルに出力し、shaking値のマップもテキスト出力する
+        - output_path: JSONファイルのパス
+        - show_limit: （未使用）互換性維持のために残す
         """
 
         panel_data = []
+        shaking_map = [[0.0 for _ in range(self.tile_width)] for _ in range(self.tile_height)]
+
         for y in range(self.tile_height):
             for x in range(self.tile_width):
                 panel = self.panels[y, x]
@@ -131,14 +133,41 @@ class PanelManager:
                     "terrain_type": panel.terrain_type
                 }
                 panel_data.append(data)
+                shaking_map[y][x] = panel.shaking
 
+        # JSON出力
         if output_path:
             with open(output_path, 'w', encoding='utf-8') as f:
                 json.dump(panel_data, f, ensure_ascii=False, indent=2)
             print(f"パネル情報を {output_path} に出力しました。")
-        else:
-            print("=== パネル状態の一部 ===")
-            for i, data in enumerate(panel_data[:show_limit]):
-                print(data)
-            if len(panel_data) > show_limit:
-                print(f"... ({len(panel_data) - show_limit}件省略)")
+
+        # 記号マップ用の関数
+        def shake_symbol(value):
+            if value < 20:
+                return " "
+            elif value < 40:
+                return "."
+            elif value < 60:
+                return ":"
+            elif value < 80:
+                return "*"
+            elif value < 90:
+                return "#"
+            else:
+                return "@"
+
+        # サンプリング間隔を自動調整（表示が多すぎないよう）
+        row_step = max(self.tile_height // 30, 1)
+        col_step = max(self.tile_width // 60, 1)
+
+        # テキストマップ出力
+        map_lines = []
+        for y in range(0, self.tile_height, row_step):
+            line = "".join(shake_symbol(shaking_map[y][x]) for x in range(0, self.tile_width, col_step))
+            map_lines.append(line)
+
+        map_output_path = Path(output_path).with_name("shaking_map.txt")
+        with open(map_output_path, "w", encoding="utf-8") as f:
+            f.write("\n".join(map_lines))
+        print(f"shaking の疑似マップを {map_output_path} に出力しました。")
+
