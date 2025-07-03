@@ -7,30 +7,26 @@ import main
 
 ## パネル情報を管理するクラス
 class PanelManager:
-    def __init__(self, stage_num: int, config_path = Path("../Config") / "map_config.json", grid_shape= (400, 300)):
+    def __init__(self, stage_num: int, tile_width, tile_height, grid_shape= (400, 300)):
         # configからマップの基本情報を読み取り
-        with open(config_path, 'r', encoding="utf-8_sig") as f:
-            config = json.load(f)
         
-        self.tile_width = config["tile_width"]
-        self.tile_height = config["tile_height"]
+        self.tile_width = tile_width
+        self.tile_height = tile_height
 
         self._set_panels(stage_num = stage_num)
 
         self.panels_list = None
 
-    def _set_panels(self, stage_num: int):
+    def _set_panels(self, stage_data=None):
         """
         ファイルからタイルを設定
         """
-        file_path = Path("../Config") / f"map_sample{stage_num}_config.json"
-        # with open(f"map_stage{stage_num}.json", "r") as f:
-        with open(file_path, "r", encoding="utf-8_sig") as f:
-            map_data = json.load(f)
-
+        if stage_data is None:
+            return 0
+        
         # 緯度・経度の範囲を取得
-        lat_min, lat_max = map_data["map_settings"]["latitude_range"]
-        lon_min, lon_max = map_data["map_settings"]["longitude_range"]
+        lat_min, lat_max = stage_data["map_settings"]["latitude_range"]
+        lon_min, lon_max = stage_data["map_settings"]["longitude_range"]
 
         # グリッド数
         h, w = self.tile_height, self.tile_width
@@ -49,7 +45,7 @@ class PanelManager:
                 panels_array[y, x] = None
 
         # 各 terrain ごとに設定
-        for terrain in map_data["terrain"]:
+        for terrain in stage_data["terrain"]:
             lat_start, lat_end = terrain["area"][0]
             lon_start, lon_end = terrain["area"][1]
 
@@ -112,6 +108,7 @@ class PanelManager:
     
     def showPanelState(self, output_path="../Debug_folder/show_panel_state.json", show_limit=5):
         """
+        デバッグ用関数
         パネルの状態をファイルに出力し、shaking値のマップもテキスト出力する
         - output_path: JSONファイルのパス
         - show_limit: （未使用）互換性維持のために残す

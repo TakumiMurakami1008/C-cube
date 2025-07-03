@@ -12,9 +12,13 @@ DEFAULT_CONFIG = {
         "longitude_range": [130, 145]  # 経度の範囲
     },
     "epicenter_distribution": {
-        "mean": [32.0, 138.0],  # 震源確率分布の中心点（緯度、経度）
-        "covariance": [[2.0, 0.0], [0.0, 2.0]],  # 震源確率分布の広がり
-        "depth_range": [0, 100]  # 震源の深さ範囲（km）
+        "line_segment": {
+            "start": [32.0, 135.0],  #震源位置端1（緯度、経度）
+            "end": [34.0, 140.0]    #震源位置端2（緯度、経度）
+        },
+        "covariance_along_line": 1.0,  #地震並行方向の広がり
+        "covariance_perpendicular": 0.5,  #地震垂直方向の広がり
+        "depth_range": [0, 100]  #震源の深さ範囲（km）
     },
     "magnitude_distribution": {
         "min": 6.0,  # 最小マグニチュード
@@ -37,14 +41,42 @@ DEFAULT_CONFIG = {
             "ground_type": "軟弱地盤"  # 地盤の種類
         },
         {
+            "type": "川",
+            "area": [[35, 40], [130, 145]],
+            "weakness": 0.7,
+            "disaster_risk": "氾濫",
+            "ground_type": ""
+        },        
+        {
             "type": "平地",
+            "area": [[35, 40], [130, 145]],
+            "weakness": 0.7,
+            "disaster_risk": "火災",
+            "ground_type": "沖積層"
+        },
+        {
+            "type": "埋立地",
             "area": [[35, 40], [130, 145]],
             "weakness": 0.7,
             "disaster_risk": "液状化",
             "ground_type": "沖積層"
         },
         {
-            "type": "山",
+            "type": "三角州",
+            "area": [[35, 40], [130, 145]],
+            "weakness": 0.7,
+            "disaster_risk": "液状化",
+            "ground_type": "沖積層"
+        },       
+        {
+            "type": "台地",
+            "area": [[35, 40], [130, 145]],
+            "weakness": 0.7,
+            "disaster_risk": "地割れ",
+            "ground_type": "沖積層"
+        },
+        {
+            "type": "山地",
             "area": [[40, 45], [130, 145]],
             "weakness": 0.5,
             "disaster_risk": "土砂災害",
@@ -74,9 +106,9 @@ def format_terrain(terrain):
         "ground_type": terrain["ground_type"]
     }
 
-def generate_config():
+def generate_config(stage_num = 1):
     """config.jsonを生成する関数"""
-    config_path = os.path.join(os.path.dirname(__file__), 'map_sample1_config.json')
+    config_path = os.path.join(os.path.dirname(__file__), f'map_sample{stage_num}_config.json')
     
     # 設定を整形
     formatted_config = {}
@@ -112,7 +144,10 @@ def generate_config():
     print(f"   - 経度範囲: {DEFAULT_CONFIG['map_settings']['longitude_range']}")
     
     print(f"\n2. 震源分布:")
-    print(f"   - 中心点: 緯度 {DEFAULT_CONFIG['epicenter_distribution']['mean'][0]}, 経度 {DEFAULT_CONFIG['epicenter_distribution']['mean'][1]}")
+    print(f"   - 線分始点: 緯度 {DEFAULT_CONFIG['epicenter_distribution']['line_segment']['start'][0]}, 経度 {DEFAULT_CONFIG['epicenter_distribution']['line_segment']['start'][1]}")
+    print(f"   - 線分終点: 緯度 {DEFAULT_CONFIG['epicenter_distribution']['line_segment']['end'][0]}, 経度 {DEFAULT_CONFIG['epicenter_distribution']['line_segment']['end'][1]}")
+    print(f"   - 並行方向分散: {DEFAULT_CONFIG['epicenter_distribution']['covariance_along_line']}")
+    print(f"   - 垂直方向分散: {DEFAULT_CONFIG['epicenter_distribution']['covariance_perpendicular']}")
     print(f"   - 深さ範囲: {DEFAULT_CONFIG['epicenter_distribution']['depth_range']} km")
     
     print(f"\n3. マグニチュード範囲:")
@@ -132,4 +167,5 @@ def generate_config():
         print(f"     * 地盤の種類: {terrain['ground_type']}")
 
 if __name__ == "__main__":
-    generate_config() 
+    stage_num = 1  # ステージ番号を指定
+    generate_config(stage_num) 

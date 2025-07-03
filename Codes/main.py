@@ -7,6 +7,7 @@ import json
 import os
 
 from dataclasses import dataclass
+import DefineEpicenter
 from EQSimulator import EQSimulatorVariableRho
 import PanelManager
 
@@ -54,14 +55,22 @@ def main():
     """
 
     file_path = Path("../Config") / f"map_config.json"
-    # with open(f"map_stage{stage_num}.json", "r") as f:
     with open(file_path, "r", encoding="utf-8_sig") as f:
         map_data = json.load(f)
         tile_width = map_data["tile_width"] 
-        tile_height = map_data["tile_width"] 
-    
+        tile_height = map_data["tile_height"] 
+
+    stage_num = 99 # ステージ番号 TODO:ステージ番号を選択画面から決定する
+    with open(f"map_stage{stage_num}.json", "r") as f:
+        stage_data = json.load(f)
+
+    # 震源地を決める関数
+    epicenter = DefineEpicenter.define_epicenter(
+        stage_data = stage_data # ステージのコンフィグファイル
+    )
+
     sim = EQSimulatorVariableRho(
-            epicenter=(2, 5), #震源​
+            epicenter=epicenter, #震源​
             magnitude=10, #地震の規模​
             grid_shape= (tile_width, tile_height),
             rho_map=np.ones((tile_width, tile_height)), #地盤密度を持つ配列​
@@ -71,15 +80,16 @@ def main():
     max_disp = sim.run(steps=100) #揺れの大きの最大値を持つ配列​
 
     pane = PanelManager.PanelManager(
-        stage_num= 0, 
-        config_path = "../Config/map_config.json", # マップ共通のコンフィグを想定
+        stage_data=stage_data, # ステージのコンフィグファイル
+        tile_width=tile_width,
+        tile_height=tile_height,
         grid_shape=(tile_width, tile_height), 
         )
 
     pane.simulate(max_disp = max_disp)
     
     import matplotlib.pyplot as plt
-    # プロット
+    # プロット（テスト）
     plt.imshow(max_disp, cmap='viridis', interpolation='nearest')
     plt.colorbar(label='Value')  # カラーバーを表示
     plt.title('2D Array Visualization')

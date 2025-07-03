@@ -1,6 +1,6 @@
 {
     "map_settings": {
-        "grid_size": { 
+        "grid_size": {
             "width": 100,
             "height": 100
         },
@@ -8,8 +8,18 @@
         "longitude_range": "[130, 145]"
     },
     "epicenter_distribution": {
-        "mean": "[32.0, 138.0]",
-        "covariance": "[[2.0, 0.0], [0.0, 2.0]]",
+        "line_segment": {
+            "start": [
+                32.0,
+                135.0
+            ],
+            "end": [
+                34.0,
+                140.0
+            ]
+        },
+        "covariance_along_line": 1.0,
+        "covariance_perpendicular": 0.5,
         "depth_range": "[0, 100]"
     },
     "magnitude_distribution": {
@@ -33,14 +43,42 @@
             "ground_type": "軟弱地盤"
         },
         {
+            "type": "川",
+            "area": "[[35, 40], [130, 145]]",
+            "weakness": 0.7,
+            "disaster_risk": "氾濫",
+            "ground_type": ""
+        },
+        {
             "type": "平地",
+            "area": "[[35, 40], [130, 145]]",
+            "weakness": 0.7,
+            "disaster_risk": "火災",
+            "ground_type": "沖積層"
+        },
+        {
+            "type": "埋立地",
             "area": "[[35, 40], [130, 145]]",
             "weakness": 0.7,
             "disaster_risk": "液状化",
             "ground_type": "沖積層"
         },
         {
-            "type": "山",
+            "type": "三角州",
+            "area": "[[35, 40], [130, 145]]",
+            "weakness": 0.7,
+            "disaster_risk": "液状化",
+            "ground_type": "沖積層"
+        },
+        {
+            "type": "台地",
+            "area": "[[35, 40], [130, 145]]",
+            "weakness": 0.7,
+            "disaster_risk": "地割れ",
+            "ground_type": "沖積層"
+        },
+        {
+            "type": "山地",
             "area": "[[40, 45], [130, 145]]",
             "weakness": 0.5,
             "disaster_risk": "土砂災害",
