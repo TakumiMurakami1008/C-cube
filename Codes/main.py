@@ -8,6 +8,8 @@ import os
 
 from dataclasses import dataclass
 import DefineEpicenter
+import DefineMagnitude
+from DefineWeaknessMap import DefineWeaknessMap
 from EQSimulator import EQSimulatorVariableRho
 import PanelManager
 
@@ -24,10 +26,9 @@ class Earthquake: #地震
 
 @dataclass
 class Panel: #パネル
-    # position: Coordinate     # パネルの座標（配列の場所で自動計算？）
-    has_building: bool         # 建物の有無
+    building_type: int         # 建物の種類（例 0: なし, 1: 家, 2: ビル, ...）
     building_strength: float   # 建物がある場合、建物の強度（0~1）、-1の場合壊れている建物とする
-    shaking: float             # 地震の揺れの大きさ（例：加速度や震度）
+    shaking: float             # 受けた地震の揺れの大きさ（例：加速度や震度）
     ground_strength: float     # 地盤の強さ（0〜1などで表現）
     terrain_type: str          # 地形情報（例："hill", "plain", "coast", etc.）
 
@@ -57,10 +58,12 @@ def main():
     file_path = Path("../Config") / f"map_config.json"
     with open(file_path, "r", encoding="utf-8_sig") as f:
         map_data = json.load(f)
-        tile_width = map_data["tile_width"] 
-        tile_height = map_data["tile_height"] 
+        grid_width = map_data["grid_width"] 
+        grid_height = map_data["grid_height"] 
 
     stage_num = 99 # ステージ番号 TODO:ステージ番号を選択画面から決定する
+
+
     with open(f"map_stage{stage_num}.json", "r") as f:
         stage_data = json.load(f)
 
@@ -68,25 +71,33 @@ def main():
     epicenter = DefineEpicenter.define_epicenter(
         stage_data = stage_data # ステージのコンフィグファイル
     )
+    # マグニチュードを決める関数
+    magnitude = DefineMagnitude.define_magnitude(
+        stage_data = stage_data
+    )
+
+    weakness_map_creator = DefineWeaknessMap(
+        stage_data = stage_data
+    )
+    weakness_map = weakness_map_creator.get_weakness_map()
 
     sim = EQSimulatorVariableRho(
             epicenter=epicenter, #震源​
-            magnitude=10, #地震の規模​
-            grid_shape= (tile_width, tile_height),
-            rho_map=np.ones((tile_width, tile_height)), #地盤密度を持つ配列​
+            magnitude=magnitude, #地震の規模​
+            grid_shape= (grid_width, grid_height),
+            rho_map = weakness_map
+            # rho_map=np.ones((grid_width, grid_height)), #地盤密度を持つ配列​
             mu=1.0, #弾性係数​
             dt=0.05
         )
     max_disp = sim.run(steps=100) #揺れの大きの最大値を持つ配列​
 
     pane = PanelManager.PanelManager(
-        stage_data=stage_data, # ステージのコンフィグファイル
-        tile_width=tile_width,
-        tile_height=tile_height,
-        grid_shape=(tile_width, tile_height), 
+        map_data=map_data, # マップのコンフィグファイル
+        stage_data=stage_data# ステージのコンフィグファイル
         )
 
-    pane.simulate(max_disp = max_disp)
+    pane_result = pane.simulate(max_disp = max_disp)
     
     import matplotlib.pyplot as plt
     # プロット（テスト）

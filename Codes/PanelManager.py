@@ -1,82 +1,67 @@
 import json
 import numpy as np
+import math
 from pathlib import Path
+import matplotlib.pyplot as plt
 
 import main
 
-
-## パネル情報を管理するクラス
 class PanelManager:
-    def __init__(self, stage_num: int, tile_width, tile_height, grid_shape= (400, 300)):
-        # configからマップの基本情報を読み取り
-        
-        self.tile_width = tile_width
-        self.tile_height = tile_height
-
-        self._set_panels(stage_num = stage_num)
-
+    def __init__(self, map_data, stage_data):
+        self.tile_width = map_data["grid_width"]
+        self.tile_height = map_data["grid_height"]
+        self._set_panels(stage_data=stage_data)
         self.panels_list = None
 
     def _set_panels(self, stage_data=None):
-        """
-        ファイルからタイルを設定
-        """
         if stage_data is None:
-            return 0
-        
-        # 緯度・経度の範囲を取得
-        lat_min, lat_max = stage_data["map_settings"]["latitude_range"]
-        lon_min, lon_max = stage_data["map_settings"]["longitude_range"]
+            raise ValueError("stage_data が指定されていません。")
 
-        # グリッド数
-        h, w = self.tile_height, self.tile_width
+        w, h = self.tile_width, self.tile_height
+        panels_array = np.empty((w, h), dtype=object)  # <== (x, y)順
 
-        panels_array = np.empty((h, w), dtype=object)
+        for x in range(w):
+            for y in range(h):
+                panels_array[x, y] = None
 
-        # 緯度・経度 → グリッドインデックスに変換する関数
-        def latlon_to_index(lat, lon):
-            y = int((lat - lat_min) / (lat_max - lat_min) * (h - 1))
-            x = int((lon - lon_min) / (lon_max - lon_min) * (w - 1))
-            return y, x
-
-        # 初期化
-        for y in range(h):
-            for x in range(w):
-                panels_array[y, x] = None
-
-        # 各 terrain ごとに設定
         for terrain in stage_data["terrain"]:
-            lat_start, lat_end = terrain["area"][0]
-            lon_start, lon_end = terrain["area"][1]
+            x0_ratio, x1_ratio = terrain["area"][0]
+            y0_ratio, y1_ratio = terrain["area"][1]
 
-            y0, _ = latlon_to_index(lat_start, lon_min)
-            y1, _ = latlon_to_index(lat_end, lon_min)
-            _, x0 = latlon_to_index(lat_min, lon_start)
-            _, x1 = latlon_to_index(lat_min, lon_end)
+            print(f"設定中の地形: {terrain['type']} ({x0_ratio}, {y0_ratio}) to ({x1_ratio}, {y1_ratio})")
+
+            x0 = int(math.floor(x0_ratio * w))
+            x1 = int(math.ceil(x1_ratio * w))
+            y0 = int(math.floor(y0_ratio * h))
+            y1 = int(math.ceil(y1_ratio * h))
+
+            x0 = max(0, min(x0, w))
+            x1 = max(0, min(x1, w))
+            y0 = max(0, min(y0, h))
+            y1 = max(0, min(y1, h))
 
             ground_strength = 1.0 - terrain["weakness"]
             terrain_type = terrain["type"]
 
-            for y in range(y0, y1 + 1):
-                for x in range(x0, x1 + 1):
-                    has_building = np.random.rand() > 0.3
-                    building_strength = np.random.rand() if has_building else 0.0
-                    shaking = 0.0
+            for x in range(x0, x1):
+                for y in range(y0, y1):
+                    building_type = 0
+                    building_strength = 0
+                    shaking = 0
 
                     panel = main.Panel(
-                        has_building=has_building,
+                        building_type=building_type,
                         building_strength=building_strength,
                         shaking=shaking,
                         ground_strength=ground_strength,
                         terrain_type=terrain_type
                     )
-                    panels_array[y, x] = panel
+                    panels_array[x, y] = panel
 
-        # 未設定エリアをデフォルトで埋める
-        for y in range(h):
-            for x in range(w):
-                if panels_array[y, x] is None:
-                    panels_array[y, x] = main.Panel(
+        for x in range(w):
+            for y in range(h):
+                if panels_array[x, y] is None:
+                    panels_array[x, y] = main.Panel(
                         has_building=False,
                         building_strength=0.0,
                         shaking=0.0,
@@ -87,39 +72,38 @@ class PanelManager:
         self.panels = panels_array
 
     def simulate(self, max_disp):
-        """
-        各座標の max_disp[y, x] に基づき、建物が壊れるかを判定
-        max_disp は self.tile_height x self.tile_width の NumPy配列である必要がある
-        """
-        if max_disp.shape != (self.tile_height, self.tile_width):
-            raise ValueError(f"max_disp のサイズが一致しません。期待されたサイズ: ({self.tile_height}, {self.tile_width})\nmax_disp.shape: {max_disp.shape}")
+        if max_disp.shape != (self.tile_width, self.tile_height):
+            raise ValueError(f"max_disp のサイズが一致しません。期待: ({self.tile_width}, {self.tile_height})\n実際: {max_disp.shape}")
 
-        for y in range(self.tile_height):
-            for x in range(self.tile_width):
-                panel = self.panels[y, x]
-                shaking = max_disp[y, x]
+        for x in range(self.tile_width):
+            for y in range(self.tile_height):
+                panel = self.panels[x, y]
+                shaking = max_disp[x, y]
                 panel.shaking = shaking
 
-                # 建物がある & 強度 < 揺れ → 壊れる
-                if panel.has_building and panel.building_strength < shaking:
-                    panel.building_strength = -1  # 壊れた状態
+                alpha = 0.5  # 地震の影響を調整する係数
+
+                # 耐震性: 建物の強さ × 地盤の強さ
+                resistance = panel.building_strength * panel.ground_strength * alpha
+
+                # 建物あり & 揺れ > 耐震性 → 壊れる
+                if panel.building_type > 0 and shaking > resistance:
+                    panel.building_strength = -1  # 壊れた建物
+
+                self.panels[x, y] = panel
 
         return self.panels
-    
+
     def showPanelState(self, output_path="../Debug_folder/show_panel_state.json", show_limit=5):
-        """
-        デバッグ用関数
-        パネルの状態をファイルに出力し、shaking値のマップもテキスト出力する
-        - output_path: JSONファイルのパス
-        - show_limit: （未使用）互換性維持のために残す
-        """
-
+        '''
+        パネルの状態を表示する（受けた震度：max_disp）
+        '''
         panel_data = []
-        shaking_map = [[0.0 for _ in range(self.tile_width)] for _ in range(self.tile_height)]
+        shaking_map = np.zeros((self.tile_width, self.tile_height), dtype=float)
 
-        for y in range(self.tile_height):
-            for x in range(self.tile_width):
-                panel = self.panels[y, x]
+        for x in range(self.tile_width):
+            for y in range(self.tile_height):
+                panel = self.panels[x, y]
                 data = {
                     "x": x,
                     "y": y,
@@ -130,41 +114,43 @@ class PanelManager:
                     "terrain_type": panel.terrain_type
                 }
                 panel_data.append(data)
-                shaking_map[y][x] = panel.shaking
+                shaking_map[x, y] = panel.shaking
 
-        # JSON出力
         if output_path:
             with open(output_path, 'w', encoding='utf-8') as f:
                 json.dump(panel_data, f, ensure_ascii=False, indent=2)
             print(f"パネル情報を {output_path} に出力しました。")
 
-        # 記号マップ用の関数
-        def shake_symbol(value):
-            if value < 20:
-                return " "
-            elif value < 40:
-                return "."
-            elif value < 60:
-                return ":"
-            elif value < 80:
-                return "*"
-            elif value < 90:
-                return "#"
-            else:
-                return "@"
+        fig, ax = plt.subplots(figsize=(8, 6))
+        im = ax.imshow(shaking_map.T, cmap='hot', interpolation='nearest', origin='upper')
+        ax.set_title("Shaking Intensity Map")
+        plt.colorbar(im, ax=ax, label="Shaking")
 
-        # サンプリング間隔を自動調整（表示が多すぎないよう）
-        row_step = max(self.tile_height // 30, 1)
-        col_step = max(self.tile_width // 60, 1)
+        image_output_path = Path(output_path).with_name("shaking_map.png")
+        plt.savefig(image_output_path, dpi=150, bbox_inches='tight')
+        print(f"shaking カラーマップ画像を {image_output_path} に保存しました。")
 
-        # テキストマップ出力
-        map_lines = []
-        for y in range(0, self.tile_height, row_step):
-            line = "".join(shake_symbol(shaking_map[y][x]) for x in range(0, self.tile_width, col_step))
-            map_lines.append(line)
+        plt.show()
 
-        map_output_path = Path(output_path).with_name("shaking_map.txt")
-        with open(map_output_path, "w", encoding="utf-8") as f:
-            f.write("\n".join(map_lines))
-        print(f"shaking の疑似マップを {map_output_path} に出力しました。")
 
+
+if __name__ == "__main__":
+    # デバッグ用のパネルマネージャーを作成
+    map_data = {
+        "grid_width": 10,
+        "grid_height": 10
+    }
+    
+    stage_data = {
+        "terrain": [
+            {
+                "type": "plain",
+                "weakness": 0.1,
+                "area": [[0, 9], [0, 9]]
+            }
+        ]
+    }
+
+    panel_manager = PanelManager(map_data=map_data, stage_data=stage_data)
+    panels = panel_manager.simulate(max_disp=np.random.rand(10, 10) * 100)
+    panel_manager.showPanelState()
