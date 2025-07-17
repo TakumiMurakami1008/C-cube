@@ -7,6 +7,17 @@
         "latitude_range": "[30, 45]",
         "longitude_range": "[130, 145]"
     },
+    "building_settings": {
+        "0": {
+            "max_count": 5
+        },
+        "1": {
+            "max_count": 10
+        },
+        "2": {
+            "max_count": 3
+        }
+    },
     "epicenter_distribution": {
         "line_segment": {
             "start": [
