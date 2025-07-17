@@ -1,0 +1,44 @@
+# 仮作成
+# TODO: rho値
+{
+    "map_settings": { # 緯度経度（実際のスケール）
+        "latitude_range": [30, 45],
+        "longitude_range": [130, 145]
+    },
+    "epicenter_distribution": { # 震源地確率分布の中心点と範囲のパラメータ
+        "mean": [32.0, 138.0],
+        "covariance": [[2.0, 0.0], [0.0, 2.0]]
+    },
+    "magnitude_distribution": {
+        "min": 6.0,
+        "max": 9.0,
+        "mean": 7.5,
+        "std": 0.8
+    },
+    "intensity_distribution": {
+        "min": 1,
+        "max": 7,
+        "mean": 4,
+        "std": 1.5
+    },
+    "terrain": [
+        {
+            "type": "海",
+            "area": [[30, 35], [130, 145]],
+            "weakness": 0.9,
+            "disaster_risk": "津波"
+        },
+        {
+            "type": "平地",
+            "area": [[35, 40], [130, 145]],
+            "weakness": 0.7,
+            "disaster_risk": "液状化"
+        },
+        {
+            "type": "山",
+            "area": [[40, 45], [130, 145]],
+            "weakness": 0.5,
+            "disaster_risk": "土砂災害"
+        }
+    ]
+} 

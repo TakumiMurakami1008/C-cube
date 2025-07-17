@@ -1,0 +1,902 @@
+[
+  {
+    "x": 0,
+    "y": 0,
+    "has_building": true,
+    "building_strength": 0.49135455687056007,
+    "shaking": 0.0,
+    "ground_strength": 0.09999999999999998,
+    "terrain_type": "海"
+  },
+  {
+    "x": 1,
+    "y": 0,
+    "has_building": true,
+    "building_strength": 0.7581662885736943,
+    "shaking": 0.0,
+    "ground_strength": 0.09999999999999998,
+    "terrain_type": "海"
+  },
+  {
+    "x": 2,
+    "y": 0,
+    "has_building": true,
+    "building_strength": 0.7402708352446952,
+    "shaking": 0.0,
+    "ground_strength": 0.09999999999999998,
+    "terrain_type": "海"
+  },
+  {
+    "x": 3,
+    "y": 0,
+    "has_building": true,
+    "building_strength": 0.6996640585075709,
+    "shaking": 0.0,
+    "ground_strength": 0.09999999999999998,
+    "terrain_type": "海"
+  },
+  {
+    "x": 4,
+    "y": 0,
+    "has_building": true,
+    "building_strength": 0.33249096547103607,
+    "shaking": 0.0,
+    "ground_strength": 0.09999999999999998,
+    "terrain_type": "海"
+  },
+  {
+    "x": 5,
+    "y": 0,
+    "has_building": false,
+    "building_strength": 0.0,
+    "shaking": 0.0,
+    "ground_strength": 0.09999999999999998,
+    "terrain_type": "海"
+  },
+  {
+    "x": 6,
+    "y": 0,
+    "has_building": true,
+    "building_strength": 0.8199243108856396,
+    "shaking": 0.0,
+    "ground_strength": 0.09999999999999998,
+    "terrain_type": "海"
+  },
+  {
+    "x": 7,
+    "y": 0,
+    "has_building": true,
+    "building_strength": 0.6948884689462894,
+    "shaking": 0.0,
+    "ground_strength": 0.09999999999999998,
+    "terrain_type": "海"
+  },
+  {
+    "x": 8,
+    "y": 0,
+    "has_building": true,
+    "building_strength": 0.8104137515861329,
+    "shaking": 0.0,
+    "ground_strength": 0.09999999999999998,
+    "terrain_type": "海"
+  },
+  {
+    "x": 9,
+    "y": 0,
+    "has_building": true,
+    "building_strength": 0.15751274961516493,
+    "shaking": 0.0,
+    "ground_strength": 0.09999999999999998,
+    "terrain_type": "海"
+  },
+  {
+    "x": 0,
+    "y": 1,
+    "has_building": true,
+    "building_strength": 0.43042835030467774,
+    "shaking": 0.0,
+    "ground_strength": 0.09999999999999998,
+    "terrain_type": "海"
+  },
+  {
+    "x": 1,
+    "y": 1,
+    "has_building": true,
+    "building_strength": -1,
+    "shaking": 9.349466326685736,
+    "ground_strength": 0.09999999999999998,
+    "terrain_type": "海"
+  },
+  {
+    "x": 2,
+    "y": 1,
+    "has_building": true,
+    "building_strength": -1,
+    "shaking": 16.37208457435806,
+    "ground_strength": 0.09999999999999998,
+    "terrain_type": "海"
+  },
+  {
+    "x": 3,
+    "y": 1,
+    "has_building": true,
+    "building_strength": -1,
+    "shaking": 30.031611152372893,
+    "ground_strength": 0.09999999999999998,
+    "terrain_type": "海"
+  },
+  {
+    "x": 4,
+    "y": 1,
+    "has_building": true,
+    "building_strength": -1,
+    "shaking": 38.84850884007903,
+    "ground_strength": 0.09999999999999998,
+    "terrain_type": "海"
+  },
+  {
+    "x": 5,
+    "y": 1,
+    "has_building": true,
+    "building_strength": -1,
+    "shaking": 44.58698293511185,
+    "ground_strength": 0.09999999999999998,
+    "terrain_type": "海"
+  },
+  {
+    "x": 6,
+    "y": 1,
+    "has_building": true,
+    "building_strength": -1,
+    "shaking": 38.848499679285545,
+    "ground_strength": 0.09999999999999998,
+    "terrain_type": "海"
+  },
+  {
+    "x": 7,
+    "y": 1,
+    "has_building": false,
+    "building_strength": 0.0,
+    "shaking": 31.121821889407514,
+    "ground_strength": 0.09999999999999998,
+    "terrain_type": "海"
+  },
+  {
+    "x": 8,
+    "y": 1,
+    "has_building": true,
+    "building_strength": -1,
+    "shaking": 15.330235577570724,
+    "ground_strength": 0.09999999999999998,
+    "terrain_type": "海"
+  },
+  {
+    "x": 9,
+    "y": 1,
+    "has_building": true,
+    "building_strength": 0.978694285675033,
+    "shaking": 0.0,
+    "ground_strength": 0.09999999999999998,
+    "terrain_type": "海"
+  },
+  {
+    "x": 0,
+    "y": 2,
+    "has_building": false,
+    "building_strength": 0.0,
+    "shaking": 0.0,
+    "ground_strength": 0.09999999999999998,
+    "terrain_type": "海"
+  },
+  {
+    "x": 1,
+    "y": 2,
+    "has_building": false,
+    "building_strength": 0.0,
+    "shaking": 11.397888648285479,
+    "ground_strength": 0.09999999999999998,
+    "terrain_type": "海"
+  },
+  {
+    "x": 2,
+    "y": 2,
+    "has_building": true,
+    "building_strength": -1,
+    "shaking": 15.768516267568653,
+    "ground_strength": 0.09999999999999998,
+    "terrain_type": "海"
+  },
+  {
+    "x": 3,
+    "y": 2,
+    "has_building": true,
+    "building_strength": -1,
+    "shaking": 23.666024402639017,
+    "ground_strength": 0.09999999999999998,
+    "terrain_type": "海"
+  },
+  {
+    "x": 4,
+    "y": 2,
+    "has_building": true,
+    "building_strength": -1,
+    "shaking": 45.42542196593368,
+    "ground_strength": 0.09999999999999998,
+    "terrain_type": "海"
+  },
+  {
+    "x": 5,
+    "y": 2,
+    "has_building": true,
+    "building_strength": -1,
+    "shaking": 101.87105441349308,
+    "ground_strength": 0.09999999999999998,
+    "terrain_type": "海"
+  },
+  {
+    "x": 6,
+    "y": 2,
+    "has_building": true,
+    "building_strength": -1,
+    "shaking": 45.42542168505463,
+    "ground_strength": 0.09999999999999998,
+    "terrain_type": "海"
+  },
+  {
+    "x": 7,
+    "y": 2,
+    "has_building": true,
+    "building_strength": -1,
+    "shaking": 23.662068804403106,
+    "ground_strength": 0.09999999999999998,
+    "terrain_type": "海"
+  },
+  {
+    "x": 8,
+    "y": 2,
+    "has_building": true,
+    "building_strength": -1,
+    "shaking": 14.37333699913552,
+    "ground_strength": 0.09999999999999998,
+    "terrain_type": "海"
+  },
+  {
+    "x": 9,
+    "y": 2,
+    "has_building": false,
+    "building_strength": 0.0,
+    "shaking": 0.0,
+    "ground_strength": 0.09999999999999998,
+    "terrain_type": "海"
+  },
+  {
+    "x": 0,
+    "y": 3,
+    "has_building": true,
+    "building_strength": 0.2393873320349701,
+    "shaking": 0.0,
+    "ground_strength": 0.30000000000000004,
+    "terrain_type": "平地"
+  },
+  {
+    "x": 1,
+    "y": 3,
+    "has_building": false,
+    "building_strength": 0.0,
+    "shaking": 13.696473651600986,
+    "ground_strength": 0.30000000000000004,
+    "terrain_type": "平地"
+  },
+  {
+    "x": 2,
+    "y": 3,
+    "has_building": true,
+    "building_strength": -1,
+    "shaking": 20.955020710430325,
+    "ground_strength": 0.30000000000000004,
+    "terrain_type": "平地"
+  },
+  {
+    "x": 3,
+    "y": 3,
+    "has_building": true,
+    "building_strength": -1,
+    "shaking": 29.915029021189667,
+    "ground_strength": 0.30000000000000004,
+    "terrain_type": "平地"
+  },
+  {
+    "x": 4,
+    "y": 3,
+    "has_building": false,
+    "building_strength": 0.0,
+    "shaking": 41.22098468581583,
+    "ground_strength": 0.30000000000000004,
+    "terrain_type": "平地"
+  },
+  {
+    "x": 5,
+    "y": 3,
+    "has_building": false,
+    "building_strength": 0.0,
+    "shaking": 45.4296445412223,
+    "ground_strength": 0.30000000000000004,
+    "terrain_type": "平地"
+  },
+  {
+    "x": 6,
+    "y": 3,
+    "has_building": true,
+    "building_strength": -1,
+    "shaking": 41.220972016760186,
+    "ground_strength": 0.30000000000000004,
+    "terrain_type": "平地"
+  },
+  {
+    "x": 7,
+    "y": 3,
+    "has_building": false,
+    "building_strength": 0.0,
+    "shaking": 29.897987255603798,
+    "ground_strength": 0.30000000000000004,
+    "terrain_type": "平地"
+  },
+  {
+    "x": 8,
+    "y": 3,
+    "has_building": true,
+    "building_strength": -1,
+    "shaking": 19.21090841175886,
+    "ground_strength": 0.30000000000000004,
+    "terrain_type": "平地"
+  },
+  {
+    "x": 9,
+    "y": 3,
+    "has_building": true,
+    "building_strength": 0.20880950923672448,
+    "shaking": 0.0,
+    "ground_strength": 0.30000000000000004,
+    "terrain_type": "平地"
+  },
+  {
+    "x": 0,
+    "y": 4,
+    "has_building": true,
+    "building_strength": 0.65868471493201,
+    "shaking": 0.0,
+    "ground_strength": 0.30000000000000004,
+    "terrain_type": "平地"
+  },
+  {
+    "x": 1,
+    "y": 4,
+    "has_building": true,
+    "building_strength": -1,
+    "shaking": 13.233123256448696,
+    "ground_strength": 0.30000000000000004,
+    "terrain_type": "平地"
+  },
+  {
+    "x": 2,
+    "y": 4,
+    "has_building": false,
+    "building_strength": 0.0,
+    "shaking": 22.680659635618287,
+    "ground_strength": 0.30000000000000004,
+    "terrain_type": "平地"
+  },
+  {
+    "x": 3,
+    "y": 4,
+    "has_building": true,
+    "building_strength": -1,
+    "shaking": 27.715322890953015,
+    "ground_strength": 0.30000000000000004,
+    "terrain_type": "平地"
+  },
+  {
+    "x": 4,
+    "y": 4,
+    "has_building": true,
+    "building_strength": -1,
+    "shaking": 29.948384938769223,
+    "ground_strength": 0.30000000000000004,
+    "terrain_type": "平地"
+  },
+  {
+    "x": 5,
+    "y": 4,
+    "has_building": false,
+    "building_strength": 0.0,
+    "shaking": 23.719449146271774,
+    "ground_strength": 0.30000000000000004,
+    "terrain_type": "平地"
+  },
+  {
+    "x": 6,
+    "y": 4,
+    "has_building": true,
+    "building_strength": -1,
+    "shaking": 29.948245160215187,
+    "ground_strength": 0.30000000000000004,
+    "terrain_type": "平地"
+  },
+  {
+    "x": 7,
+    "y": 4,
+    "has_building": true,
+    "building_strength": -1,
+    "shaking": 27.660637035011092,
+    "ground_strength": 0.30000000000000004,
+    "terrain_type": "平地"
+  },
+  {
+    "x": 8,
+    "y": 4,
+    "has_building": true,
+    "building_strength": -1,
+    "shaking": 20.08961918699367,
+    "ground_strength": 0.30000000000000004,
+    "terrain_type": "平地"
+  },
+  {
+    "x": 9,
+    "y": 4,
+    "has_building": true,
+    "building_strength": 0.6693611680285377,
+    "shaking": 0.0,
+    "ground_strength": 0.30000000000000004,
+    "terrain_type": "平地"
+  },
+  {
+    "x": 0,
+    "y": 5,
+    "has_building": false,
+    "building_strength": 0.0,
+    "shaking": 0.0,
+    "ground_strength": 0.30000000000000004,
+    "terrain_type": "平地"
+  },
+  {
+    "x": 1,
+    "y": 5,
+    "has_building": false,
+    "building_strength": 0.0,
+    "shaking": 6.6169034037047885,
+    "ground_strength": 0.30000000000000004,
+    "terrain_type": "平地"
+  },
+  {
+    "x": 2,
+    "y": 5,
+    "has_building": true,
+    "building_strength": -1,
+    "shaking": 17.72583180807126,
+    "ground_strength": 0.30000000000000004,
+    "terrain_type": "平地"
+  },
+  {
+    "x": 3,
+    "y": 5,
+    "has_building": true,
+    "building_strength": -1,
+    "shaking": 22.80581737525458,
+    "ground_strength": 0.30000000000000004,
+    "terrain_type": "平地"
+  },
+  {
+    "x": 4,
+    "y": 5,
+    "has_building": true,
+    "building_strength": -1,
+    "shaking": 21.121863606187016,
+    "ground_strength": 0.30000000000000004,
+    "terrain_type": "平地"
+  },
+  {
+    "x": 5,
+    "y": 5,
+    "has_building": true,
+    "building_strength": -1,
+    "shaking": 16.60974149736591,
+    "ground_strength": 0.30000000000000004,
+    "terrain_type": "平地"
+  },
+  {
+    "x": 6,
+    "y": 5,
+    "has_building": true,
+    "building_strength": -1,
+    "shaking": 21.120719702195593,
+    "ground_strength": 0.30000000000000004,
+    "terrain_type": "平地"
+  },
+  {
+    "x": 7,
+    "y": 5,
+    "has_building": false,
+    "building_strength": 0.0,
+    "shaking": 22.680659635618184,
+    "ground_strength": 0.30000000000000004,
+    "terrain_type": "平地"
+  },
+  {
+    "x": 8,
+    "y": 5,
+    "has_building": true,
+    "building_strength": -1,
+    "shaking": 16.181291973835556,
+    "ground_strength": 0.30000000000000004,
+    "terrain_type": "平地"
+  },
+  {
+    "x": 9,
+    "y": 5,
+    "has_building": false,
+    "building_strength": 0.0,
+    "shaking": 0.0,
+    "ground_strength": 0.30000000000000004,
+    "terrain_type": "平地"
+  },
+  {
+    "x": 0,
+    "y": 6,
+    "has_building": true,
+    "building_strength": 0.5700330405474695,
+    "shaking": 0.0,
+    "ground_strength": 0.5,
+    "terrain_type": "山"
+  },
+  {
+    "x": 1,
+    "y": 6,
+    "has_building": false,
+    "building_strength": 0.0,
+    "shaking": 1.8953281747123398,
+    "ground_strength": 0.5,
+    "terrain_type": "山"
+  },
+  {
+    "x": 2,
+    "y": 6,
+    "has_building": false,
+    "building_strength": 0.0,
+    "shaking": 6.855989843231814,
+    "ground_strength": 0.5,
+    "terrain_type": "山"
+  },
+  {
+    "x": 3,
+    "y": 6,
+    "has_building": false,
+    "building_strength": 0.0,
+    "shaking": 14.086902400506201,
+    "ground_strength": 0.5,
+    "terrain_type": "山"
+  },
+  {
+    "x": 4,
+    "y": 6,
+    "has_building": false,
+    "building_strength": 0.0,
+    "shaking": 15.63085438709477,
+    "ground_strength": 0.5,
+    "terrain_type": "山"
+  },
+  {
+    "x": 5,
+    "y": 6,
+    "has_building": true,
+    "building_strength": -1,
+    "shaking": 15.028221297657986,
+    "ground_strength": 0.5,
+    "terrain_type": "山"
+  },
+  {
+    "x": 6,
+    "y": 6,
+    "has_building": true,
+    "building_strength": -1,
+    "shaking": 15.626428192479585,
+    "ground_strength": 0.5,
+    "terrain_type": "山"
+  },
+  {
+    "x": 7,
+    "y": 6,
+    "has_building": false,
+    "building_strength": 0.0,
+    "shaking": 14.040955802505348,
+    "ground_strength": 0.5,
+    "terrain_type": "山"
+  },
+  {
+    "x": 8,
+    "y": 6,
+    "has_building": true,
+    "building_strength": -1,
+    "shaking": 6.503257141418456,
+    "ground_strength": 0.5,
+    "terrain_type": "山"
+  },
+  {
+    "x": 9,
+    "y": 6,
+    "has_building": true,
+    "building_strength": 0.7120859465966056,
+    "shaking": 0.0,
+    "ground_strength": 0.5,
+    "terrain_type": "山"
+  },
+  {
+    "x": 0,
+    "y": 7,
+    "has_building": true,
+    "building_strength": 0.3138036777674872,
+    "shaking": 0.0,
+    "ground_strength": 0.5,
+    "terrain_type": "山"
+  },
+  {
+    "x": 1,
+    "y": 7,
+    "has_building": true,
+    "building_strength": 0.668560915538448,
+    "shaking": 0.3509731218768719,
+    "ground_strength": 0.5,
+    "terrain_type": "山"
+  },
+  {
+    "x": 2,
+    "y": 7,
+    "has_building": true,
+    "building_strength": -1,
+    "shaking": 1.571026225564127,
+    "ground_strength": 0.5,
+    "terrain_type": "山"
+  },
+  {
+    "x": 3,
+    "y": 7,
+    "has_building": true,
+    "building_strength": -1,
+    "shaking": 4.328451573933848,
+    "ground_strength": 0.5,
+    "terrain_type": "山"
+  },
+  {
+    "x": 4,
+    "y": 7,
+    "has_building": true,
+    "building_strength": -1,
+    "shaking": 6.8785016444967315,
+    "ground_strength": 0.5,
+    "terrain_type": "山"
+  },
+  {
+    "x": 5,
+    "y": 7,
+    "has_building": true,
+    "building_strength": -1,
+    "shaking": 7.124240282234646,
+    "ground_strength": 0.5,
+    "terrain_type": "山"
+  },
+  {
+    "x": 6,
+    "y": 7,
+    "has_building": true,
+    "building_strength": -1,
+    "shaking": 6.8779735170016005,
+    "ground_strength": 0.5,
+    "terrain_type": "山"
+  },
+  {
+    "x": 7,
+    "y": 7,
+    "has_building": false,
+    "building_strength": 0.0,
+    "shaking": 4.322265799382207,
+    "ground_strength": 0.5,
+    "terrain_type": "山"
+  },
+  {
+    "x": 8,
+    "y": 7,
+    "has_building": false,
+    "building_strength": 0.0,
+    "shaking": 1.5162321476552143,
+    "ground_strength": 0.5,
+    "terrain_type": "山"
+  },
+  {
+    "x": 9,
+    "y": 7,
+    "has_building": false,
+    "building_strength": 0.0,
+    "shaking": 0.0,
+    "ground_strength": 0.5,
+    "terrain_type": "山"
+  },
+  {
+    "x": 0,
+    "y": 8,
+    "has_building": true,
+    "building_strength": 0.7470216942639232,
+    "shaking": 0.0,
+    "ground_strength": 0.5,
+    "terrain_type": "山"
+  },
+  {
+    "x": 1,
+    "y": 8,
+    "has_building": true,
+    "building_strength": 0.8356873867587016,
+    "shaking": 0.04533269037097847,
+    "ground_strength": 0.5,
+    "terrain_type": "山"
+  },
+  {
+    "x": 2,
+    "y": 8,
+    "has_building": true,
+    "building_strength": 0.4448782797619686,
+    "shaking": 0.2390864395270252,
+    "ground_strength": 0.5,
+    "terrain_type": "山"
+  },
+  {
+    "x": 3,
+    "y": 8,
+    "has_building": false,
+    "building_strength": 0.0,
+    "shaking": 0.8084464536865338,
+    "ground_strength": 0.5,
+    "terrain_type": "山"
+  },
+  {
+    "x": 4,
+    "y": 8,
+    "has_building": true,
+    "building_strength": -1,
+    "shaking": 1.6201247858273742,
+    "ground_strength": 0.5,
+    "terrain_type": "山"
+  },
+  {
+    "x": 5,
+    "y": 8,
+    "has_building": false,
+    "building_strength": 0.0,
+    "shaking": 1.8805496557334327,
+    "ground_strength": 0.5,
+    "terrain_type": "山"
+  },
+  {
+    "x": 6,
+    "y": 8,
+    "has_building": true,
+    "building_strength": -1,
+    "shaking": 1.6200776158182304,
+    "ground_strength": 0.5,
+    "terrain_type": "山"
+  },
+  {
+    "x": 7,
+    "y": 8,
+    "has_building": true,
+    "building_strength": -1,
+    "shaking": 0.807832546056682,
+    "ground_strength": 0.5,
+    "terrain_type": "山"
+  },
+  {
+    "x": 8,
+    "y": 8,
+    "has_building": false,
+    "building_strength": 0.0,
+    "shaking": 0.23294783498454066,
+    "ground_strength": 0.5,
+    "terrain_type": "山"
+  },
+  {
+    "x": 9,
+    "y": 8,
+    "has_building": true,
+    "building_strength": 0.5467352574243475,
+    "shaking": 0.0,
+    "ground_strength": 0.5,
+    "terrain_type": "山"
+  },
+  {
+    "x": 0,
+    "y": 9,
+    "has_building": true,
+    "building_strength": 0.8974864637235185,
+    "shaking": 0.0,
+    "ground_strength": 0.5,
+    "terrain_type": "山"
+  },
+  {
+    "x": 1,
+    "y": 9,
+    "has_building": true,
+    "building_strength": 0.82050074462022,
+    "shaking": 0.0,
+    "ground_strength": 0.5,
+    "terrain_type": "山"
+  },
+  {
+    "x": 2,
+    "y": 9,
+    "has_building": true,
+    "building_strength": 0.9707299524574717,
+    "shaking": 0.0,
+    "ground_strength": 0.5,
+    "terrain_type": "山"
+  },
+  {
+    "x": 3,
+    "y": 9,
+    "has_building": true,
+    "building_strength": 0.9352214404531672,
+    "shaking": 0.0,
+    "ground_strength": 0.5,
+    "terrain_type": "山"
+  },
+  {
+    "x": 4,
+    "y": 9,
+    "has_building": true,
+    "building_strength": 0.8763546458953535,
+    "shaking": 0.0,
+    "ground_strength": 0.5,
+    "terrain_type": "山"
+  },
+  {
+    "x": 5,
+    "y": 9,
+    "has_building": true,
+    "building_strength": 0.8980533704651574,
+    "shaking": 0.0,
+    "ground_strength": 0.5,
+    "terrain_type": "山"
+  },
+  {
+    "x": 6,
+    "y": 9,
+    "has_building": true,
+    "building_strength": 0.05999253804974425,
+    "shaking": 0.0,
+    "ground_strength": 0.5,
+    "terrain_type": "山"
+  },
+  {
+    "x": 7,
+    "y": 9,
+    "has_building": false,
+    "building_strength": 0.0,
+    "shaking": 0.0,
+    "ground_strength": 0.5,
+    "terrain_type": "山"
+  },
+  {
+    "x": 8,
+    "y": 9,
+    "has_building": false,
+    "building_strength": 0.0,
+    "shaking": 0.0,
+    "ground_strength": 0.5,
+    "terrain_type": "山"
+  },
+  {
+    "x": 9,
+    "y": 9,
+    "has_building": true,
+    "building_strength": 0.6218649109527143,
+    "shaking": 0.0,
+    "ground_strength": 0.5,
+    "terrain_type": "山"
+  }
+]

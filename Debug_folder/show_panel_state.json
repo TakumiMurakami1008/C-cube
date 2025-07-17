@@ -1,0 +1,902 @@
+[
+  {
+    "x": 0,
+    "y": 0,
+    "has_building": true,
+    "building_strength": -1,
+    "shaking": 76.5443438127733,
+    "ground_strength": 0.9,
+    "terrain_type": "plain"
+  },
+  {
+    "x": 0,
+    "y": 1,
+    "has_building": true,
+    "building_strength": -1,
+    "shaking": 59.07546402479609,
+    "ground_strength": 0.9,
+    "terrain_type": "plain"
+  },
+  {
+    "x": 0,
+    "y": 2,
+    "has_building": false,
+    "building_strength": 0.0,
+    "shaking": 44.38401272487212,
+    "ground_strength": 0.9,
+    "terrain_type": "plain"
+  },
+  {
+    "x": 0,
+    "y": 3,
+    "has_building": true,
+    "building_strength": -1,
+    "shaking": 47.25192754340919,
+    "ground_strength": 0.9,
+    "terrain_type": "plain"
+  },
+  {
+    "x": 0,
+    "y": 4,
+    "has_building": false,
+    "building_strength": 0.0,
+    "shaking": 83.6736758469226,
+    "ground_strength": 0.9,
+    "terrain_type": "plain"
+  },
+  {
+    "x": 0,
+    "y": 5,
+    "has_building": true,
+    "building_strength": -1,
+    "shaking": 67.15344385221566,
+    "ground_strength": 0.9,
+    "terrain_type": "plain"
+  },
+  {
+    "x": 0,
+    "y": 6,
+    "has_building": false,
+    "building_strength": 0.0,
+    "shaking": 80.80084567140163,
+    "ground_strength": 0.9,
+    "terrain_type": "plain"
+  },
+  {
+    "x": 0,
+    "y": 7,
+    "has_building": true,
+    "building_strength": -1,
+    "shaking": 43.096003338571556,
+    "ground_strength": 0.9,
+    "terrain_type": "plain"
+  },
+  {
+    "x": 0,
+    "y": 8,
+    "has_building": false,
+    "building_strength": 0.0,
+    "shaking": 60.06304078670013,
+    "ground_strength": 0.9,
+    "terrain_type": "plain"
+  },
+  {
+    "x": 0,
+    "y": 9,
+    "has_building": true,
+    "building_strength": -1,
+    "shaking": 44.896888722171624,
+    "ground_strength": 0.9,
+    "terrain_type": "plain"
+  },
+  {
+    "x": 1,
+    "y": 0,
+    "has_building": false,
+    "building_strength": 0.0,
+    "shaking": 5.248527074853193,
+    "ground_strength": 0.9,
+    "terrain_type": "plain"
+  },
+  {
+    "x": 1,
+    "y": 1,
+    "has_building": true,
+    "building_strength": -1,
+    "shaking": 29.659243945820755,
+    "ground_strength": 0.9,
+    "terrain_type": "plain"
+  },
+  {
+    "x": 1,
+    "y": 2,
+    "has_building": true,
+    "building_strength": -1,
+    "shaking": 78.39108608606438,
+    "ground_strength": 0.9,
+    "terrain_type": "plain"
+  },
+  {
+    "x": 1,
+    "y": 3,
+    "has_building": true,
+    "building_strength": -1,
+    "shaking": 55.08312491331991,
+    "ground_strength": 0.9,
+    "terrain_type": "plain"
+  },
+  {
+    "x": 1,
+    "y": 4,
+    "has_building": false,
+    "building_strength": 0.0,
+    "shaking": 80.75795892241169,
+    "ground_strength": 0.9,
+    "terrain_type": "plain"
+  },
+  {
+    "x": 1,
+    "y": 5,
+    "has_building": false,
+    "building_strength": 0.0,
+    "shaking": 74.69100983317082,
+    "ground_strength": 0.9,
+    "terrain_type": "plain"
+  },
+  {
+    "x": 1,
+    "y": 6,
+    "has_building": false,
+    "building_strength": 0.0,
+    "shaking": 27.101924817501132,
+    "ground_strength": 0.9,
+    "terrain_type": "plain"
+  },
+  {
+    "x": 1,
+    "y": 7,
+    "has_building": false,
+    "building_strength": 0.0,
+    "shaking": 59.8767330740078,
+    "ground_strength": 0.9,
+    "terrain_type": "plain"
+  },
+  {
+    "x": 1,
+    "y": 8,
+    "has_building": false,
+    "building_strength": 0.0,
+    "shaking": 62.40023528258687,
+    "ground_strength": 0.9,
+    "terrain_type": "plain"
+  },
+  {
+    "x": 1,
+    "y": 9,
+    "has_building": true,
+    "building_strength": -1,
+    "shaking": 62.17437281377958,
+    "ground_strength": 0.9,
+    "terrain_type": "plain"
+  },
+  {
+    "x": 2,
+    "y": 0,
+    "has_building": false,
+    "building_strength": 0.0,
+    "shaking": 67.09284985126078,
+    "ground_strength": 0.9,
+    "terrain_type": "plain"
+  },
+  {
+    "x": 2,
+    "y": 1,
+    "has_building": true,
+    "building_strength": -1,
+    "shaking": 36.11203186249456,
+    "ground_strength": 0.9,
+    "terrain_type": "plain"
+  },
+  {
+    "x": 2,
+    "y": 2,
+    "has_building": false,
+    "building_strength": 0.0,
+    "shaking": 93.33051042859839,
+    "ground_strength": 0.9,
+    "terrain_type": "plain"
+  },
+  {
+    "x": 2,
+    "y": 3,
+    "has_building": true,
+    "building_strength": -1,
+    "shaking": 21.491352093476046,
+    "ground_strength": 0.9,
+    "terrain_type": "plain"
+  },
+  {
+    "x": 2,
+    "y": 4,
+    "has_building": true,
+    "building_strength": -1,
+    "shaking": 31.238938836558972,
+    "ground_strength": 0.9,
+    "terrain_type": "plain"
+  },
+  {
+    "x": 2,
+    "y": 5,
+    "has_building": true,
+    "building_strength": -1,
+    "shaking": 31.415759791653088,
+    "ground_strength": 0.9,
+    "terrain_type": "plain"
+  },
+  {
+    "x": 2,
+    "y": 6,
+    "has_building": true,
+    "building_strength": -1,
+    "shaking": 64.59451149052661,
+    "ground_strength": 0.9,
+    "terrain_type": "plain"
+  },
+  {
+    "x": 2,
+    "y": 7,
+    "has_building": true,
+    "building_strength": -1,
+    "shaking": 53.57503228878351,
+    "ground_strength": 0.9,
+    "terrain_type": "plain"
+  },
+  {
+    "x": 2,
+    "y": 8,
+    "has_building": true,
+    "building_strength": -1,
+    "shaking": 29.298342796704503,
+    "ground_strength": 0.9,
+    "terrain_type": "plain"
+  },
+  {
+    "x": 2,
+    "y": 9,
+    "has_building": true,
+    "building_strength": -1,
+    "shaking": 0.7260859743941528,
+    "ground_strength": 0.9,
+    "terrain_type": "plain"
+  },
+  {
+    "x": 3,
+    "y": 0,
+    "has_building": false,
+    "building_strength": 0.0,
+    "shaking": 84.83656172154318,
+    "ground_strength": 0.9,
+    "terrain_type": "plain"
+  },
+  {
+    "x": 3,
+    "y": 1,
+    "has_building": false,
+    "building_strength": 0.0,
+    "shaking": 29.162666532096814,
+    "ground_strength": 0.9,
+    "terrain_type": "plain"
+  },
+  {
+    "x": 3,
+    "y": 2,
+    "has_building": true,
+    "building_strength": -1,
+    "shaking": 92.89108276095315,
+    "ground_strength": 0.9,
+    "terrain_type": "plain"
+  },
+  {
+    "x": 3,
+    "y": 3,
+    "has_building": true,
+    "building_strength": -1,
+    "shaking": 57.62309630858422,
+    "ground_strength": 0.9,
+    "terrain_type": "plain"
+  },
+  {
+    "x": 3,
+    "y": 4,
+    "has_building": false,
+    "building_strength": 0.0,
+    "shaking": 18.046084143811257,
+    "ground_strength": 0.9,
+    "terrain_type": "plain"
+  },
+  {
+    "x": 3,
+    "y": 5,
+    "has_building": true,
+    "building_strength": -1,
+    "shaking": 99.11788440884241,
+    "ground_strength": 0.9,
+    "terrain_type": "plain"
+  },
+  {
+    "x": 3,
+    "y": 6,
+    "has_building": true,
+    "building_strength": -1,
+    "shaking": 95.84362192480481,
+    "ground_strength": 0.9,
+    "terrain_type": "plain"
+  },
+  {
+    "x": 3,
+    "y": 7,
+    "has_building": true,
+    "building_strength": -1,
+    "shaking": 59.55684184522606,
+    "ground_strength": 0.9,
+    "terrain_type": "plain"
+  },
+  {
+    "x": 3,
+    "y": 8,
+    "has_building": true,
+    "building_strength": -1,
+    "shaking": 70.01329311578183,
+    "ground_strength": 0.9,
+    "terrain_type": "plain"
+  },
+  {
+    "x": 3,
+    "y": 9,
+    "has_building": true,
+    "building_strength": -1,
+    "shaking": 88.23057179199243,
+    "ground_strength": 0.9,
+    "terrain_type": "plain"
+  },
+  {
+    "x": 4,
+    "y": 0,
+    "has_building": true,
+    "building_strength": -1,
+    "shaking": 7.692892427917575,
+    "ground_strength": 0.9,
+    "terrain_type": "plain"
+  },
+  {
+    "x": 4,
+    "y": 1,
+    "has_building": true,
+    "building_strength": -1,
+    "shaking": 97.80963608364307,
+    "ground_strength": 0.9,
+    "terrain_type": "plain"
+  },
+  {
+    "x": 4,
+    "y": 2,
+    "has_building": true,
+    "building_strength": -1,
+    "shaking": 82.55308942306603,
+    "ground_strength": 0.9,
+    "terrain_type": "plain"
+  },
+  {
+    "x": 4,
+    "y": 3,
+    "has_building": true,
+    "building_strength": -1,
+    "shaking": 53.03978178558727,
+    "ground_strength": 0.9,
+    "terrain_type": "plain"
+  },
+  {
+    "x": 4,
+    "y": 4,
+    "has_building": false,
+    "building_strength": 0.0,
+    "shaking": 96.92752226450492,
+    "ground_strength": 0.9,
+    "terrain_type": "plain"
+  },
+  {
+    "x": 4,
+    "y": 5,
+    "has_building": true,
+    "building_strength": -1,
+    "shaking": 43.777759711928,
+    "ground_strength": 0.9,
+    "terrain_type": "plain"
+  },
+  {
+    "x": 4,
+    "y": 6,
+    "has_building": true,
+    "building_strength": -1,
+    "shaking": 60.434407715251446,
+    "ground_strength": 0.9,
+    "terrain_type": "plain"
+  },
+  {
+    "x": 4,
+    "y": 7,
+    "has_building": false,
+    "building_strength": 0.0,
+    "shaking": 42.4879462257973,
+    "ground_strength": 0.9,
+    "terrain_type": "plain"
+  },
+  {
+    "x": 4,
+    "y": 8,
+    "has_building": true,
+    "building_strength": -1,
+    "shaking": 92.97454737547119,
+    "ground_strength": 0.9,
+    "terrain_type": "plain"
+  },
+  {
+    "x": 4,
+    "y": 9,
+    "has_building": true,
+    "building_strength": -1,
+    "shaking": 0.9905886362558736,
+    "ground_strength": 0.9,
+    "terrain_type": "plain"
+  },
+  {
+    "x": 5,
+    "y": 0,
+    "has_building": true,
+    "building_strength": 0.3617856098060558,
+    "shaking": 0.2214320200819464,
+    "ground_strength": 0.9,
+    "terrain_type": "plain"
+  },
+  {
+    "x": 5,
+    "y": 1,
+    "has_building": true,
+    "building_strength": -1,
+    "shaking": 19.728136475072546,
+    "ground_strength": 0.9,
+    "terrain_type": "plain"
+  },
+  {
+    "x": 5,
+    "y": 2,
+    "has_building": true,
+    "building_strength": -1,
+    "shaking": 2.1183821750606735,
+    "ground_strength": 0.9,
+    "terrain_type": "plain"
+  },
+  {
+    "x": 5,
+    "y": 3,
+    "has_building": true,
+    "building_strength": -1,
+    "shaking": 29.561095556411622,
+    "ground_strength": 0.9,
+    "terrain_type": "plain"
+  },
+  {
+    "x": 5,
+    "y": 4,
+    "has_building": false,
+    "building_strength": 0.0,
+    "shaking": 19.700070167317307,
+    "ground_strength": 0.9,
+    "terrain_type": "plain"
+  },
+  {
+    "x": 5,
+    "y": 5,
+    "has_building": true,
+    "building_strength": -1,
+    "shaking": 74.47464495880321,
+    "ground_strength": 0.9,
+    "terrain_type": "plain"
+  },
+  {
+    "x": 5,
+    "y": 6,
+    "has_building": true,
+    "building_strength": -1,
+    "shaking": 59.55430979907356,
+    "ground_strength": 0.9,
+    "terrain_type": "plain"
+  },
+  {
+    "x": 5,
+    "y": 7,
+    "has_building": true,
+    "building_strength": -1,
+    "shaking": 76.95460729000284,
+    "ground_strength": 0.9,
+    "terrain_type": "plain"
+  },
+  {
+    "x": 5,
+    "y": 8,
+    "has_building": false,
+    "building_strength": 0.0,
+    "shaking": 61.19849317903483,
+    "ground_strength": 0.9,
+    "terrain_type": "plain"
+  },
+  {
+    "x": 5,
+    "y": 9,
+    "has_building": true,
+    "building_strength": -1,
+    "shaking": 1.900059656769304,
+    "ground_strength": 0.9,
+    "terrain_type": "plain"
+  },
+  {
+    "x": 6,
+    "y": 0,
+    "has_building": true,
+    "building_strength": -1,
+    "shaking": 36.48512827507123,
+    "ground_strength": 0.9,
+    "terrain_type": "plain"
+  },
+  {
+    "x": 6,
+    "y": 1,
+    "has_building": true,
+    "building_strength": -1,
+    "shaking": 67.92172568218932,
+    "ground_strength": 0.9,
+    "terrain_type": "plain"
+  },
+  {
+    "x": 6,
+    "y": 2,
+    "has_building": true,
+    "building_strength": -1,
+    "shaking": 69.2726826832641,
+    "ground_strength": 0.9,
+    "terrain_type": "plain"
+  },
+  {
+    "x": 6,
+    "y": 3,
+    "has_building": false,
+    "building_strength": 0.0,
+    "shaking": 8.389323276019544,
+    "ground_strength": 0.9,
+    "terrain_type": "plain"
+  },
+  {
+    "x": 6,
+    "y": 4,
+    "has_building": true,
+    "building_strength": -1,
+    "shaking": 41.52606013578123,
+    "ground_strength": 0.9,
+    "terrain_type": "plain"
+  },
+  {
+    "x": 6,
+    "y": 5,
+    "has_building": true,
+    "building_strength": -1,
+    "shaking": 36.79948389811825,
+    "ground_strength": 0.9,
+    "terrain_type": "plain"
+  },
+  {
+    "x": 6,
+    "y": 6,
+    "has_building": true,
+    "building_strength": -1,
+    "shaking": 37.88712609939833,
+    "ground_strength": 0.9,
+    "terrain_type": "plain"
+  },
+  {
+    "x": 6,
+    "y": 7,
+    "has_building": true,
+    "building_strength": -1,
+    "shaking": 86.05831876378357,
+    "ground_strength": 0.9,
+    "terrain_type": "plain"
+  },
+  {
+    "x": 6,
+    "y": 8,
+    "has_building": true,
+    "building_strength": -1,
+    "shaking": 11.796872499157285,
+    "ground_strength": 0.9,
+    "terrain_type": "plain"
+  },
+  {
+    "x": 6,
+    "y": 9,
+    "has_building": true,
+    "building_strength": -1,
+    "shaking": 17.800736475467748,
+    "ground_strength": 0.9,
+    "terrain_type": "plain"
+  },
+  {
+    "x": 7,
+    "y": 0,
+    "has_building": true,
+    "building_strength": -1,
+    "shaking": 12.99583295410317,
+    "ground_strength": 0.9,
+    "terrain_type": "plain"
+  },
+  {
+    "x": 7,
+    "y": 1,
+    "has_building": false,
+    "building_strength": 0.0,
+    "shaking": 89.5207539641979,
+    "ground_strength": 0.9,
+    "terrain_type": "plain"
+  },
+  {
+    "x": 7,
+    "y": 2,
+    "has_building": true,
+    "building_strength": -1,
+    "shaking": 76.11732246575824,
+    "ground_strength": 0.9,
+    "terrain_type": "plain"
+  },
+  {
+    "x": 7,
+    "y": 3,
+    "has_building": true,
+    "building_strength": -1,
+    "shaking": 84.0021398057864,
+    "ground_strength": 0.9,
+    "terrain_type": "plain"
+  },
+  {
+    "x": 7,
+    "y": 4,
+    "has_building": true,
+    "building_strength": -1,
+    "shaking": 8.240821553424038,
+    "ground_strength": 0.9,
+    "terrain_type": "plain"
+  },
+  {
+    "x": 7,
+    "y": 5,
+    "has_building": true,
+    "building_strength": -1,
+    "shaking": 59.93768599287528,
+    "ground_strength": 0.9,
+    "terrain_type": "plain"
+  },
+  {
+    "x": 7,
+    "y": 6,
+    "has_building": true,
+    "building_strength": -1,
+    "shaking": 94.8151243403157,
+    "ground_strength": 0.9,
+    "terrain_type": "plain"
+  },
+  {
+    "x": 7,
+    "y": 7,
+    "has_building": true,
+    "building_strength": -1,
+    "shaking": 86.34416610463066,
+    "ground_strength": 0.9,
+    "terrain_type": "plain"
+  },
+  {
+    "x": 7,
+    "y": 8,
+    "has_building": true,
+    "building_strength": -1,
+    "shaking": 90.9044676989932,
+    "ground_strength": 0.9,
+    "terrain_type": "plain"
+  },
+  {
+    "x": 7,
+    "y": 9,
+    "has_building": true,
+    "building_strength": -1,
+    "shaking": 83.42197114717963,
+    "ground_strength": 0.9,
+    "terrain_type": "plain"
+  },
+  {
+    "x": 8,
+    "y": 0,
+    "has_building": true,
+    "building_strength": -1,
+    "shaking": 33.768828364920935,
+    "ground_strength": 0.9,
+    "terrain_type": "plain"
+  },
+  {
+    "x": 8,
+    "y": 1,
+    "has_building": true,
+    "building_strength": -1,
+    "shaking": 78.4119301098181,
+    "ground_strength": 0.9,
+    "terrain_type": "plain"
+  },
+  {
+    "x": 8,
+    "y": 2,
+    "has_building": false,
+    "building_strength": 0.0,
+    "shaking": 96.01800224486612,
+    "ground_strength": 0.9,
+    "terrain_type": "plain"
+  },
+  {
+    "x": 8,
+    "y": 3,
+    "has_building": true,
+    "building_strength": -1,
+    "shaking": 87.97875813622038,
+    "ground_strength": 0.9,
+    "terrain_type": "plain"
+  },
+  {
+    "x": 8,
+    "y": 4,
+    "has_building": true,
+    "building_strength": -1,
+    "shaking": 11.691897820007602,
+    "ground_strength": 0.9,
+    "terrain_type": "plain"
+  },
+  {
+    "x": 8,
+    "y": 5,
+    "has_building": false,
+    "building_strength": 0.0,
+    "shaking": 69.50213886775815,
+    "ground_strength": 0.9,
+    "terrain_type": "plain"
+  },
+  {
+    "x": 8,
+    "y": 6,
+    "has_building": true,
+    "building_strength": -1,
+    "shaking": 64.49054021676591,
+    "ground_strength": 0.9,
+    "terrain_type": "plain"
+  },
+  {
+    "x": 8,
+    "y": 7,
+    "has_building": true,
+    "building_strength": -1,
+    "shaking": 96.70349398159989,
+    "ground_strength": 0.9,
+    "terrain_type": "plain"
+  },
+  {
+    "x": 8,
+    "y": 8,
+    "has_building": false,
+    "building_strength": 0.0,
+    "shaking": 96.55219864547294,
+    "ground_strength": 0.9,
+    "terrain_type": "plain"
+  },
+  {
+    "x": 8,
+    "y": 9,
+    "has_building": true,
+    "building_strength": -1,
+    "shaking": 60.418647178005834,
+    "ground_strength": 0.9,
+    "terrain_type": "plain"
+  },
+  {
+    "x": 9,
+    "y": 0,
+    "has_building": false,
+    "building_strength": 0.0,
+    "shaking": 24.9937436921179,
+    "ground_strength": 0.9,
+    "terrain_type": "plain"
+  },
+  {
+    "x": 9,
+    "y": 1,
+    "has_building": true,
+    "building_strength": -1,
+    "shaking": 2.4602686413969455,
+    "ground_strength": 0.9,
+    "terrain_type": "plain"
+  },
+  {
+    "x": 9,
+    "y": 2,
+    "has_building": true,
+    "building_strength": -1,
+    "shaking": 30.013744859391366,
+    "ground_strength": 0.9,
+    "terrain_type": "plain"
+  },
+  {
+    "x": 9,
+    "y": 3,
+    "has_building": true,
+    "building_strength": -1,
+    "shaking": 2.6703668549489135,
+    "ground_strength": 0.9,
+    "terrain_type": "plain"
+  },
+  {
+    "x": 9,
+    "y": 4,
+    "has_building": true,
+    "building_strength": -1,
+    "shaking": 87.68910345071055,
+    "ground_strength": 0.9,
+    "terrain_type": "plain"
+  },
+  {
+    "x": 9,
+    "y": 5,
+    "has_building": true,
+    "building_strength": -1,
+    "shaking": 59.069738892853266,
+    "ground_strength": 0.9,
+    "terrain_type": "plain"
+  },
+  {
+    "x": 9,
+    "y": 6,
+    "has_building": true,
+    "building_strength": -1,
+    "shaking": 42.97265468306125,
+    "ground_strength": 0.9,
+    "terrain_type": "plain"
+  },
+  {
+    "x": 9,
+    "y": 7,
+    "has_building": false,
+    "building_strength": 0.0,
+    "shaking": 82.49842617275084,
+    "ground_strength": 0.9,
+    "terrain_type": "plain"
+  },
+  {
+    "x": 9,
+    "y": 8,
+    "has_building": true,
+    "building_strength": -1,
+    "shaking": 29.600917157718797,
+    "ground_strength": 0.9,
+    "terrain_type": "plain"
+  },
+  {
+    "x": 9,
+    "y": 9,
+    "has_building": true,
+    "building_strength": -1,
+    "shaking": 98.87239263060576,
+    "ground_strength": 0.9,
+    "terrain_type": "plain"
+  }
+]
