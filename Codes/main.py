@@ -12,6 +12,7 @@ import DefineMagnitude
 from DefineWeaknessMap import DefineWeaknessMap
 from EQSimulator import EQSimulatorVariableRho
 import PanelManager
+import show_result
 
 @dataclass 
 class Coordinate: #座標
@@ -85,9 +86,9 @@ def main():
             epicenter=epicenter, #震源​
             magnitude=magnitude, #地震の規模​
             grid_shape= (grid_width, grid_height),
-            rho_map = weakness_map
+            rho_map = weakness_map,
             # rho_map=np.ones((grid_width, grid_height)), #地盤密度を持つ配列​
-            mu=1.0, #弾性係数​
+            mu=10.0, #弾性係数​
             dt=0.05
         )
     max_disp = sim.run(steps=100) #揺れの大きの最大値を持つ配列​
@@ -97,7 +98,11 @@ def main():
         stage_data=stage_data# ステージのコンフィグファイル
         )
 
+    # pygame側でパネル情報（建物）を更新
+
     pane_result = pane.simulate(max_disp = max_disp)
+
+    show_result.show_result_screen(score)
     
     import matplotlib.pyplot as plt
     # プロット（テスト）

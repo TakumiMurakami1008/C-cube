@@ -81,9 +81,8 @@ class PanelManager:
                 shaking = max_disp[x, y]
                 panel.shaking = shaking
 
+                # 耐震性: 建物の強さ × 地盤の強さ（TODO：バランス調整）
                 alpha = 0.5  # 地震の影響を調整する係数
-
-                # 耐震性: 建物の強さ × 地盤の強さ
                 resistance = panel.building_strength * panel.ground_strength * alpha
 
                 # 建物あり & 揺れ > 耐震性 → 壊れる
@@ -93,6 +92,26 @@ class PanelManager:
                 self.panels[x, y] = panel
 
         return self.panels
+
+    def calculate_result(self):
+            """
+            パネルの状態からスコアを計算する
+            """
+            total_score = 0
+            building_scores = {
+                1: 100,   # 民家
+                2: 500,   # 商業ビル
+                3: 2000   # 発電所
+            }
+
+            for x in range(self.tile_width):
+                for y in range(self.tile_height):
+                    panel = self.panels[x, y]
+                    if panel.building_type > 0 and panel.building_strength >= 0:
+                        score = building_scores.get(panel.building_type, 0)
+                        total_score += score
+
+            return total_score
 
     def showPanelState(self, output_path="../Debug_folder/show_panel_state.json", show_limit=5):
         '''

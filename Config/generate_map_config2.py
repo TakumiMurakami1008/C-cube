@@ -116,7 +116,7 @@ DEFAULT_CONFIG = {
             "area": [[30, 50], [0, 100]],
             "weakness": 0.7,
             "disaster_risk": "氾濫",
-            "ground_type": ""
+            "ground_type": "軟弱地盤"
         },        
         {
             "type": "平地",
