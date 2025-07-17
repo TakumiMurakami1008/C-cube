@@ -12,7 +12,7 @@ import DefineMagnitude
 from DefineWeaknessMap import DefineWeaknessMap
 from EQSimulator import EQSimulatorVariableRho
 import PanelManager
-import show_result
+import result_inf
 
 @dataclass 
 class Coordinate: #座標
@@ -102,7 +102,11 @@ def main():
 
     pane_result = pane.simulate(max_disp = max_disp)
 
-    show_result.show_result_screen(score)
+    # building_config.json のパス
+    building_config_path = "building_config.json"
+
+    # 結果計算
+    collapse_count, survive_count, total_score = result_inf.calc_building_stats(pane_result, building_config_path)
     
     import matplotlib.pyplot as plt
     # プロット（テスト）
