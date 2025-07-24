@@ -251,7 +251,7 @@ class EQSimulatorVariableRho:
         plt.savefig(f"{output_dir}/frame_{step:05d}.png")
         plt.close()
 
-    def run(self, steps=1000, save_interval=10, output_dir="frames"):
+    def run(self, steps=200, save_interval=10, output_dir="frames"):
         for step in range(steps):
             self.step()
             if self.save_frames and step % save_interval == 0:
@@ -287,10 +287,10 @@ if __name__ == "__main__":
             magnitude=10, #地震の規模​
             grid_shape= (tile_width, tile_height),
             rho_map=np.ones((tile_width, tile_height)), #地盤密度を持つ配列​
-            mu=1.0, #弾性係数​
-            dt=0.05,
+            mu=0.5, #弾性係数​
+            dt=0.3,
             save_frames= True
         )
 
-    sim.run(steps=2000, save_interval=10, output_dir="../Debug_folder/frames")
+    sim.run(steps=200, save_interval=10, output_dir="../Debug_folder/frames")
     make_video_from_frames("../Debug_folder/frames", "../Debug_folder/quake_simulation.mp4", fps=10)
