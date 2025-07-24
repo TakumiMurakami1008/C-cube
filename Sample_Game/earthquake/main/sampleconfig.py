@@ -78,12 +78,15 @@ class Param:
         
 
 class Obj:
-    def __init__(self, num, x, y, color):
+    def __init__(self, num, name, strength, score, x, y):
         self.num = num
+        self.name = name
+        self.strength = strength
+        self.score = score
         self.pos_x = x
         self.pos_y = y
-        self.color = color
         self.first_select = False
+        
 
 class Panel: #パネル
     # position: Coordinate     # パネルの座標（配列の場所で自動計算？）
@@ -194,9 +197,9 @@ class SampleObject:
         
         self.start_click = [None] * Param.tile_num
 
-        self.obj = [None] * self.obj_num
+        self.obj = [None] * MAX_OBJECT
 
-        self.put_start_obj(Param)
+        self.set_obj_param(Param)
         # self.set_field()
 
         self.select_obj_num = -1
@@ -249,14 +252,16 @@ class SampleObject:
                 # elif self.panel[x][y].terrain_type == "ocean":
                 #     pygame.draw.rect(screen, OCEAN, field)
 
-                if self.stage.panel[x][y].terrain_type == "山":
-                    pygame.draw.rect(screen, GREEN, field)
-                elif self.stage.panel[x][y].terrain_type == "平地":
-                    pygame.draw.rect(screen, BROWN, field)
-                elif self.stage.panel[x][y].terrain_type == "海":
-                    pygame.draw.rect(screen, OCEAN, field)
-                else:
-                    pygame.draw.rect(screen, BLACK, field)
+                # if self.stage.panel[x][y].terrain_type == "山":
+                #     pygame.draw.rect(screen, GREEN, field)
+                # elif self.stage.panel[x][y].terrain_type == "平地":
+                #     pygame.draw.rect(screen, BROWN, field)
+                # elif self.stage.panel[x][y].terrain_type == "海":
+                #     pygame.draw.rect(screen, OCEAN, field)
+                # else:
+                #     pygame.draw.rect(screen, BLACK, field)
+
+                self.set_panel_color(x, y, field)
 
                 rect = pygame.Rect(x * Param.GRID_SIZE, y * Param.GRID_SIZE, Param.GRID_SIZE, Param.GRID_SIZE) #各マスの位置とサイズを定義するためのrectを作成
                 pygame.draw.rect(screen, BLACK, rect, 1) #定義したrectを描画
@@ -269,9 +274,10 @@ class SampleObject:
                 # if self.board[x][y] is not None:
                 #     self.draw_stone(x, y, self.board[x][y]) #置かれていたら駒を描画
 
-                for i in range(self.obj_num):
+                for i in range(MAX_OBJECT):
                     if self.is_obj(x,y, i):
-                        self.draw_stone(x, y, self.obj[i].color, Param)
+                        # self.draw_stone(x, y, Param)
+                        self.draw_building(x, y, self.obj[i].name, Param)
 
         pygame.draw.rect(screen, GRAY, start_rect)
         for y in range(int(Param.VAR_GRID_NUM)):
@@ -279,13 +285,39 @@ class SampleObject:
                 rect = pygame.Rect((Param.HOR_GRID_NUM-1) * Param.GRID_SIZE, y * Param.GRID_SIZE, Param.GRID_SIZE, Param.GRID_SIZE) #各マスの位置とサイズを定義するためのrectを作成
                 pygame.draw.rect(screen, BLACK, rect, 2) #定義したrectを描画
 
-            for i in range(self.obj_num):
+            for i in range(MAX_OBJECT):
                 if self.is_obj(Param.HOR_GRID_NUM-1,y, i):
-                    self.draw_stone(Param.HOR_GRID_NUM-1, y, self.obj[i].color, Param)
+                    self.draw_building(Param.HOR_GRID_NUM-1, y, self.obj[i].name, Param)
+
+    def set_panel_color(self, x, y, field):
+        if self.stage.panel[x][y].terrain_type == "山":
+            pygame.draw.rect(screen, GREEN, field)
+        elif self.stage.panel[x][y].terrain_type == "平地":
+            pygame.draw.rect(screen, BROWN, field)
+        elif self.stage.panel[x][y].terrain_type == "海":
+            pygame.draw.rect(screen, OCEAN, field)
+        else:
+            pygame.draw.rect(screen, BLACK, field)
 
     #駒を描画
-    def draw_stone(self, x, y, color, Param):
-        pygame.draw.circle(screen, color, (x * Param.GRID_SIZE + Param.GRID_SIZE // 2, y * Param.GRID_SIZE + Param.GRID_SIZE // 2), Param.GRID_SIZE // 2 - 4)
+    # def draw_stone(self, x, y, Param):
+    #     pygame.draw.circle(screen, color, (x * Param.GRID_SIZE + Param.GRID_SIZE // 2, y * Param.GRID_SIZE + Param.GRID_SIZE // 2), Param.GRID_SIZE // 2 - 4)
+
+    #建物を描画
+    def draw_building(self, x, y, name, Param):
+
+        if name == "民家":
+            building_image = pygame.image.load('Images/house.png')
+        elif name == "商業ビル":
+            building_image = pygame.image.load('Images/depart.png')
+        elif name == "発電所":
+            building_image = pygame.image.load('Images/generator.png')
+        
+        
+        building_image_resize = pygame.transform.scale(building_image, (Param.GRID_SIZE, Param.GRID_SIZE))
+        building_image_rect = building_image.get_rect()
+        building_image_rect = (x * Param.GRID_SIZE, y * Param.GRID_SIZE)
+        screen.blit(building_image_resize, building_image_rect)
 
     def is_obj(self, x, y, obj_num):
 
@@ -318,7 +350,7 @@ class SampleObject:
                     return True
         
         elif Param.tile_num <= x and x < HOR_SIZE:
-            for i in range(self.obj_num):
+            for i in range(MAX_OBJECT):
                 if self.is_obj(x,y,i):
                     print("start_select")
                     print(x,y)
@@ -333,7 +365,7 @@ class SampleObject:
 
     def put_obj(self, x, y):
         can_put = True
-        for i in range(self.obj_num):
+        for i in range(MAX_OBJECT):
             if i != self.select_obj_num:
                 if self.is_obj(x,y,i):
                     can_put = False
@@ -359,20 +391,26 @@ class SampleObject:
             return True
         return False
     
-    def put_start_obj(self, Param):
-        for i in range(self.obj_num):
-            if i == 0:
-                self.obj[i] = Obj(i, Param.HOR_GRID_NUM-1, i, BLACK)
-                print("start" + str(i) + "=" + str(Param.HOR_GRID_NUM-1) + "," + str(i) + ",BLACK")
-            elif i == 1:
-                self.obj[i] = Obj(i, Param.HOR_GRID_NUM-1, i, RED)
-                print("start" + str(i) + "=" + str(Param.HOR_GRID_NUM-1) + "," + str(i) + ",RED")
-            elif i == 2:
-                self.obj[i] = Obj(i, Param.HOR_GRID_NUM-1, i, BLUE)
-                print("start" + str(i) + "=" + str(Param.HOR_GRID_NUM-1) + "," + str(i) + ",BLUE")
-            else:
-                self.obj[i] = Obj(i, Param.HOR_GRID_NUM-1, i, YELLOW)
-                print("start" + str(i) + "=" + str(Param.HOR_GRID_NUM-1) + "," + str(i) + ",YELLOW")
+    def set_obj_param(self, Param):
+        path = Path("../Config") / f"building_config.json"
+        with open(path, "r", encoding="utf-8_sig") as f:
+            building = json.load(f)
+            for i in range(MAX_OBJECT):
+                building_num = building[str(i)]
+                # if i == 0:
+                #     self.obj[i] = Obj(i, Param.HOR_GRID_NUM-1, i, BLACK)
+                #     print("start" + str(i) + "=" + str(Param.HOR_GRID_NUM-1) + "," + str(i) + ",BLACK")
+                # elif i == 1:
+                #     self.obj[i] = Obj(i, Param.HOR_GRID_NUM-1, i, RED)
+                #     print("start" + str(i) + "=" + str(Param.HOR_GRID_NUM-1) + "," + str(i) + ",RED")
+                # elif i == 2:
+                #     self.obj[i] = Obj(i, Param.HOR_GRID_NUM-1, i, BLUE)
+                #     print("start" + str(i) + "=" + str(Param.HOR_GRID_NUM-1) + "," + str(i) + ",BLUE")
+                # else:
+                #     self.obj[i] = Obj(i, Param.HOR_GRID_NUM-1, i, YELLOW)
+                #     print("start" + str(i) + "=" + str(Param.HOR_GRID_NUM-1) + "," + str(i) + ",YELLOW")
+
+                self.obj[i] = Obj(i, building_num["name"], building_num["strength"], building_num["score"], Param.HOR_GRID_NUM-1, i) #num, name, strength, score, x, y
 
     def write_text(self, Param):
         text_num = 0
@@ -393,6 +431,16 @@ class SampleObject:
             stage_num=stage_num,
             Param=Param
         )
+
+    def read_config(self):
+        path = Path("../Config") / f"building_config.json"
+        with open(path, "r", encoding="utf-8_sig") as f:
+            building = json.load(f)
+            for i in range(MAX_OBJECT):
+                map_settings = building["map_settings"]
+                self.latitiude = building["latitude_range"] 
+                self.longtitude = building["longitude_range"]
+
 
                     
 
