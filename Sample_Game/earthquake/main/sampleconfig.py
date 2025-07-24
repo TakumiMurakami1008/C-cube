@@ -34,8 +34,6 @@ HOR_MARGIN_SIZE = HOR_SIZE-SIZE
 # VAR_GRID_NUM = int(SIZE/GRID_SIZE)
 # HOR_GRID_NUM = int(HOR_SIZE/GRID_SIZE)
 
-FONT_SIZE = (VAR_MARGIN_SIZE) // MAX_OBJECT
-
 #pygameの初期化
 
 pygame.init()
@@ -43,7 +41,10 @@ pygame.init()
 screen = pygame.display.set_mode((HOR_SIZE,VAR_SIZE))
 pygame.display.set_caption('オセロ') #ウィンドウのタイトルを設定
 
-default_font = pygame.font.SysFont(None, FONT_SIZE)
+# default_font = pygame.font.SysFont(None, FONT_SIZE)
+FONT_SIZE = (VAR_MARGIN_SIZE) // (MAX_OBJECT+1) 
+font_path = "NotoSansJP-VariableFont_wght.ttf"
+font = pygame.font.Font(font_path, FONT_SIZE)
 
 class Param:
     tile_width : int
@@ -293,6 +294,15 @@ class SampleObject:
                 if self.is_obj(Param.HOR_GRID_NUM-1,y, i):
                     self.draw_building(Param.HOR_GRID_NUM-1, y, self.obj[i].name, Param)
 
+        # for y in range(int(Param.VAR_GRID_NUM)):
+        #     if self.start_click[y] is not None:
+        #         rect = pygame.Rect((Param.HOR_GRID_NUM-1) * Param.GRID_SIZE, y * 50, 50, 50) #各マスの位置とサイズを定義するためのrectを作成
+        #         pygame.draw.rect(screen, BLACK, rect, 2) #定義したrectを描画
+
+        #     for i in range(MAX_OBJECT):
+        #         if self.is_obj(Param.HOR_GRID_NUM-1,y, i):
+        #             self.draw_start_building((Param.HOR_GRID_NUM-1), y, self.obj[i].name, Param)
+
     def set_panel_color(self, x, y, field):
         if self.stage.panel[x][y].terrain_type == "山":
             pygame.draw.rect(screen, GREEN, field)
@@ -317,7 +327,22 @@ class SampleObject:
         elif name == "発電所":
             building_image = pygame.image.load('Images/generator.png')
         
+
+        building_image_resize = pygame.transform.scale(building_image, (Param.GRID_SIZE, Param.GRID_SIZE))
+        building_image_rect = building_image.get_rect()
+        building_image_rect = (x * Param.GRID_SIZE, y * Param.GRID_SIZE)
+        screen.blit(building_image_resize, building_image_rect)
+
+    def draw_start_building(self, x, y, name, Param):
+
+        if name == "民家":
+            building_image = pygame.image.load('Images/house.png')
+        elif name == "商業ビル":
+            building_image = pygame.image.load('Images/depart.png')
+        elif name == "発電所":
+            building_image = pygame.image.load('Images/generator.png')
         
+
         building_image_resize = pygame.transform.scale(building_image, (Param.GRID_SIZE, Param.GRID_SIZE))
         building_image_rect = building_image.get_rect()
         building_image_rect = (x * Param.GRID_SIZE, y * Param.GRID_SIZE)
@@ -422,10 +447,14 @@ class SampleObject:
         pygame.draw.rect(screen, BLACK, text_rect)
         for x in range(Param.tile_num):
             for y in range(Param.tile_num):
+                get_obj_name = "None"
                 if self.stage.panel[x][y].has_building == True:
-                    text = "building_pos=" + str(x) + "," + str(y) + "," + self.stage.panel[x][y].terrain_type
+                    for i in range (MAX_OBJECT):
+                        if self.obj[i].pos_x == x and self.obj[i].pos_y == y:
+                            get_obj_name = self.obj[i].name
+                    text = "building_pos=" + str(x) + "," + str(y) + "," + self.stage.panel[x][y].terrain_type + "," + get_obj_name
                     print(text)
-                    screen_text = default_font.render(text, True, WHITE)
+                    screen_text = font.render(text, True, WHITE)
                     screen_pos = (10, SIZE+FONT_SIZE*text_num)
                     screen.blit(screen_text, screen_pos)
                     text_num = text_num+1
@@ -509,7 +538,7 @@ class StageSelect:
 
         text = "STAGE" + str(stage_num)
 
-        screen_text = default_font.render(text, True, WHITE)
+        screen_text = font.render(text, True, WHITE)
         screen_pos = (HOR_SIZE//2, FONT_SIZE)
         screen.blit(screen_text, screen_pos)
 
