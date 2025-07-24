@@ -6,9 +6,14 @@ def calc_building_stats(pane_result, building_config_path):
     with open(building_config_path, "r", encoding="utf-8") as f:
         building_config = json.load(f)
 
-    # 建物種類ごとの倒壊数・スコア初期化
-    collapse_count = {int(k): 0 for k in building_config.keys()}
-    survive_count = {int(k): 0 for k in building_config.keys()}
+    # 建物タイプ数を取得
+    type_indices = [int(k) for k in building_config.keys()]
+    max_type = max(type_indices)
+    num_types = max_type + 1
+
+    # 建物種類ごとの倒壊数・スコア初期化（リストで管理）
+    collapse_count = [0 for _ in range(num_types)]
+    survive_count = [0 for _ in range(num_types)]
 
     # スコア計算用リスト
     buildings = []
@@ -43,6 +48,6 @@ def calc_building_stats(pane_result, building_config_path):
 
     print(f"合計スコア: {total_score}")
 
-    # 必要なら辞書で返す
+    # collapse_count, survive_countをリストで返す
     return collapse_count, survive_count, total_score
 

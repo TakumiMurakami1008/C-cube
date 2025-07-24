@@ -65,7 +65,7 @@ def main():
     stage_num = 99 # ステージ番号 TODO:ステージ番号を選択画面から決定する
 
 
-    with open(f"map_stage{stage_num}.json", "r") as f:
+    with open(f"map_sample{stage_num}_config.json", "r") as f:
         stage_data = json.load(f)
 
     # 震源地を決める関数
@@ -91,7 +91,7 @@ def main():
             mu=10.0, #弾性係数​
             dt=0.05
         )
-    max_disp = sim.run(steps=100) #揺れの大きの最大値を持つ配列​
+    max_disp = sim.run(steps=200) #揺れの大きの最大値を持つ配列​
 
     pane = PanelManager.PanelManager(
         map_data=map_data, # マップのコンフィグファイル
@@ -105,7 +105,7 @@ def main():
     # building_config.json のパス
     building_config_path = "building_config.json"
 
-    # 結果計算
+    # 結果計算 建物倒壊数(建物番号順にリスト)、建物生存数(建物番号順にリスト)、合計スコア
     collapse_count, survive_count, total_score = result_inf.calc_building_stats(pane_result, building_config_path)
     
     import matplotlib.pyplot as plt
