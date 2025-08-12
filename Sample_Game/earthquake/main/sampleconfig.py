@@ -232,9 +232,19 @@ class SampleObject:
         # スペース入力でシミュレーション実行
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_SPACE:
+<<<<<<< HEAD
+                for i in range (10):
+                    self.draw_board_right(Param)
+                    pygame.display.flip() #画面を更新して描画内容を表示
+                    pygame.time.wait(20)
+                    self.draw_board_left(Param)
+                    pygame.display.flip() #画面を更新して描画内容を表示
+                    pygame.time.wait(20)
+=======
 
                 # TODO
                 
+>>>>>>> 9b022fa61ec6b8ee50ae625bf40f656bfd166de3
                 self.write_text(Param)
 
         self.draw_board(Param)
@@ -242,7 +252,6 @@ class SampleObject:
 
     #ボードを描画
     def draw_board(self, Param):
-        # screen.fill(BLACK) #画面全体を緑で塗りつぶす
         start_rect = pygame.Rect(SIZE, 0, HOR_MARGIN_SIZE, SIZE)
         pygame.draw.rect(screen, GRAY, start_rect)
 
@@ -250,22 +259,6 @@ class SampleObject:
             for y in range(Param.tile_num):
                 field = pygame.Rect(x * Param.GRID_SIZE, y * Param.GRID_SIZE, Param.GRID_SIZE, Param.GRID_SIZE) 
                 
-                # if self.panel[x][y].terrain_type == "hill":
-                #     pygame.draw.rect(screen, GREEN, field)
-                # elif self.panel[x][y].terrain_type == "plain":
-                #     pygame.draw.rect(screen, BROWN, field)
-                # elif self.panel[x][y].terrain_type == "ocean":
-                #     pygame.draw.rect(screen, OCEAN, field)
-
-                # if self.stage.panel[x][y].terrain_type == "山":
-                #     pygame.draw.rect(screen, GREEN, field)
-                # elif self.stage.panel[x][y].terrain_type == "平地":
-                #     pygame.draw.rect(screen, BROWN, field)
-                # elif self.stage.panel[x][y].terrain_type == "海":
-                #     pygame.draw.rect(screen, OCEAN, field)
-                # else:
-                #     pygame.draw.rect(screen, BLACK, field)
-
                 self.set_panel_color(x, y, field)
 
                 rect = pygame.Rect(x * Param.GRID_SIZE, y * Param.GRID_SIZE, Param.GRID_SIZE, Param.GRID_SIZE) #各マスの位置とサイズを定義するためのrectを作成
@@ -275,13 +268,8 @@ class SampleObject:
                     rect = pygame.Rect(x * Param.GRID_SIZE, y * Param.GRID_SIZE, Param.GRID_SIZE, Param.GRID_SIZE) #各マスの位置とサイズを定義するためのrectを作成
                     pygame.draw.rect(screen, WHITE, rect, 2) #定義したrectを描画
 
-                # マスに駒が置かれているか
-                # if self.board[x][y] is not None:
-                #     self.draw_stone(x, y, self.board[x][y]) #置かれていたら駒を描画
-
                 for i in range(MAX_OBJECT):
                     if self.is_obj(x,y, i):
-                        # self.draw_stone(x, y, Param)
                         self.draw_building(x, y, self.obj[i].name, Param)
 
         pygame.draw.rect(screen, GRAY, start_rect)
@@ -294,15 +282,6 @@ class SampleObject:
                 if self.is_obj(Param.HOR_GRID_NUM-1,y, i):
                     self.draw_building(Param.HOR_GRID_NUM-1, y, self.obj[i].name, Param)
 
-        # for y in range(int(Param.VAR_GRID_NUM)):
-        #     if self.start_click[y] is not None:
-        #         rect = pygame.Rect((Param.HOR_GRID_NUM-1) * Param.GRID_SIZE, y * 50, 50, 50) #各マスの位置とサイズを定義するためのrectを作成
-        #         pygame.draw.rect(screen, BLACK, rect, 2) #定義したrectを描画
-
-        #     for i in range(MAX_OBJECT):
-        #         if self.is_obj(Param.HOR_GRID_NUM-1,y, i):
-        #             self.draw_start_building((Param.HOR_GRID_NUM-1), y, self.obj[i].name, Param)
-
     def set_panel_color(self, x, y, field):
         if self.stage.panel[x][y].terrain_type == "山":
             pygame.draw.rect(screen, GREEN, field)
@@ -312,10 +291,6 @@ class SampleObject:
             pygame.draw.rect(screen, OCEAN, field)
         else:
             pygame.draw.rect(screen, BLACK, field)
-
-    #駒を描画
-    # def draw_stone(self, x, y, Param):
-    #     pygame.draw.circle(screen, color, (x * Param.GRID_SIZE + Param.GRID_SIZE // 2, y * Param.GRID_SIZE + Param.GRID_SIZE // 2), Param.GRID_SIZE // 2 - 4)
 
     #建物を描画
     def draw_building(self, x, y, name, Param):
@@ -333,20 +308,53 @@ class SampleObject:
         building_image_rect = (x * Param.GRID_SIZE, y * Param.GRID_SIZE)
         screen.blit(building_image_resize, building_image_rect)
 
-    def draw_start_building(self, x, y, name, Param):
+    def draw_board_right(self, Param):
+        # screen.fill(BLACK) #画面全体を緑で塗りつぶす
+        start_rect = pygame.Rect(SIZE, 0, HOR_MARGIN_SIZE, SIZE)
+        pygame.draw.rect(screen, GRAY, start_rect)
 
-        if name == "民家":
-            building_image = pygame.image.load('Images/house.png')
-        elif name == "商業ビル":
-            building_image = pygame.image.load('Images/depart.png')
-        elif name == "発電所":
-            building_image = pygame.image.load('Images/generator.png')
-        
+        for x in range(Param.tile_num):
+            for y in range(Param.tile_num):
+                field = pygame.Rect(x * Param.GRID_SIZE+10, y * Param.GRID_SIZE, Param.GRID_SIZE, Param.GRID_SIZE) 
 
-        building_image_resize = pygame.transform.scale(building_image, (Param.GRID_SIZE, Param.GRID_SIZE))
-        building_image_rect = building_image.get_rect()
-        building_image_rect = (x * Param.GRID_SIZE, y * Param.GRID_SIZE)
-        screen.blit(building_image_resize, building_image_rect)
+                self.set_panel_color(x, y, field)
+
+                rect = pygame.Rect(x * Param.GRID_SIZE+10, y * Param.GRID_SIZE, Param.GRID_SIZE, Param.GRID_SIZE) #各マスの位置とサイズを定義するためのrectを作成
+                pygame.draw.rect(screen, BLACK, rect, 1) #定義したrectを描画
+
+                for i in range(MAX_OBJECT):
+                    if self.is_obj(x,y, i):
+                        self.draw_building(x, y, self.obj[i].name, Param)
+
+        pygame.draw.rect(screen, GRAY, start_rect)
+        for y in range(int(Param.VAR_GRID_NUM)):
+            for i in range(MAX_OBJECT):
+                if self.is_obj(Param.HOR_GRID_NUM-1, y, i):
+                    self.draw_building(Param.HOR_GRID_NUM-1, y, self.obj[i].name, Param)
+
+    def draw_board_left(self, Param):
+        # screen.fill(BLACK) #画面全体を緑で塗りつぶす
+        start_rect = pygame.Rect(SIZE, 0, HOR_MARGIN_SIZE, SIZE)
+        pygame.draw.rect(screen, GRAY, start_rect)
+
+        for x in range(Param.tile_num):
+            for y in range(Param.tile_num):
+                field = pygame.Rect(x * Param.GRID_SIZE-10, y * Param.GRID_SIZE, Param.GRID_SIZE, Param.GRID_SIZE) 
+
+                self.set_panel_color(x, y, field)
+
+                rect = pygame.Rect(x * Param.GRID_SIZE-10, y * Param.GRID_SIZE, Param.GRID_SIZE, Param.GRID_SIZE) #各マスの位置とサイズを定義するためのrectを作成
+                pygame.draw.rect(screen, BLACK, rect, 1) #定義したrectを描画
+
+                for i in range(MAX_OBJECT):
+                    if self.is_obj(x,y, i):
+                        self.draw_building(x, y, self.obj[i].name, Param)
+
+        pygame.draw.rect(screen, GRAY, start_rect)
+        for y in range(int(Param.VAR_GRID_NUM)):
+            for i in range(MAX_OBJECT):
+                if self.is_obj(Param.HOR_GRID_NUM-1, y, i):
+                    self.draw_building(Param.HOR_GRID_NUM-1, y, self.obj[i].name, Param)
 
     def is_obj(self, x, y, obj_num):
 
@@ -568,7 +576,7 @@ def main():
                 if event.key == pygame.K_RETURN:
                     window = 1
                     game.get_stage(stage_select.stage_num, param)
-                    screen.fill(BLACK) #画面全体を緑で塗りつぶす
+                    screen.fill(BLACK) #画面全体を黒で塗りつぶす
 
             match window:
                 case 0:
