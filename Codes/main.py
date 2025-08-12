@@ -59,8 +59,8 @@ def main():
     file_path = Path("../Config") / f"map_config.json"
     with open(file_path, "r", encoding="utf-8_sig") as f:
         map_data = json.load(f)
-        grid_width = map_data["grid_width"] 
-        grid_height = map_data["grid_height"] 
+        tile_width = map_data["tile_width"] 
+        tile_height = map_data["tile_height"] 
 
     stage_num = 99 # ステージ番号 TODO:ステージ番号を選択画面から決定する
 
@@ -85,7 +85,7 @@ def main():
     sim = EQSimulatorVariableRho(
             epicenter=epicenter, #震源​
             magnitude=magnitude, #地震の規模​
-            grid_shape= (grid_width, grid_height),
+            grid_shape= (tile_width, tile_height),
             rho_map = weakness_map,
             # rho_map=np.ones((grid_width, grid_height)), #地盤密度を持つ配列​
             mu=10.0, #弾性係数​

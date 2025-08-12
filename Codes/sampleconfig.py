@@ -20,9 +20,15 @@ BLUE = (0,0,255)
 YELLOW = (0,255,255)
 BROWN = (200,100,0)
 OCEAN = (0,160,255)
+RIVER = (100,255,220)
+PLATEAU = (131,255,147) # 台地
+DELTA = (128, 128, 0) # 三角州
 
 # 建物の最大値
 MAX_OBJECT = 3
+
+# マップの最大値
+MAX_STAGE_NUM = 2
 
 #マップサイズ
 SIZE = 500
@@ -56,9 +62,11 @@ class Param:
     GRID_SIZE : int
     VAR_GRID_NUM: int
     HOR_GRID_NUM : int
+
     def __init__(self):
         path = Path("../Config") / f"map_config.json"
-        stage_num = 0
+        self.stage_num = None
+
         with open(path, "r", encoding="utf-8_sig") as f:
             map_data = json.load(f)
             self.tile_width = map_data["tile_width"] 
@@ -74,12 +82,16 @@ class Param:
 
         self.GRID_SIZE = SIZE/self.tile_num
         self.VAR_GRID_NUM = int(SIZE/self.GRID_SIZE)
-        self.HOR_GRID_NUM = int(HOR_SIZE/self.GRID_SIZE)
+        self.HOR_GRID_NUM = int(SIZE/self.GRID_SIZE)
 
         print("tile_num: ", self.tile_num)
         print("GRID_SIZE: ", self.GRID_SIZE)
         print("VAR_GRID_NUM: ", self.VAR_GRID_NUM)
         print("HOR_GRID_NUM: ", self.HOR_GRID_NUM)
+
+    def set_stage_num(self, stage_num):
+        self.stage_num = stage_num
+
 
 # 建物オブジェクト
 class Obj:
@@ -94,24 +106,29 @@ class Obj:
 
 # パネル
 class Panel: 
-    # position: Coordinate     # パネルの座標（配列の場所で自動計算？）
-    has_building: bool         # 建物の有無
+    # # position: Coordinate     # パネルの座標（配列の場所で自動計算？）
+    # has_building: bool         # 建物の有無
+    # building_strength: float   # 建物がある場合、建物の強度（0~1）、-1の場合壊れている建物とする
+    # shaking: float             # 地震の揺れの大きさ（例：加速度や震度）
+    # ground_strength: float     # 地盤の強さ（0〜1などで表現）
+    # terrain_type: str          # 地形情報（例："hill", "plain", "coast", etc.）
+    building_type: int         # 建物の種類（例 0: なし, 1: 家, 2: ビル, ...）
     building_strength: float   # 建物がある場合、建物の強度（0~1）、-1の場合壊れている建物とする
-    shaking: float             # 地震の揺れの大きさ（例：加速度や震度）
+    shaking: float             # 受けた地震の揺れの大きさ（例：加速度や震度）
     ground_strength: float     # 地盤の強さ（0〜1などで表現）
     terrain_type: str          # 地形情報（例："hill", "plain", "coast", etc.）
-
-    def __init__(self, has_building, building_strength, shaking, ground_strength, terrain_type):
-        self.has_building = has_building
+    def __init__(self, building_type, building_strength, shaking, ground_strength, terrain_type):
+        self.building_type = building_type
         self.building_strength = building_strength
         self.shaking = shaking
         self.ground_strength = ground_strength
         self.terrain_type = terrain_type
 
+# マップ情報を保持するクラス
 class SampleStage:
     def __init__(self, stage_num, Param):
         self.panel = [[None] * Param.tile_num for _ in range(Param.tile_num)] #ゲームボードを表す2次元リスト
-        
+        print(f"1:{stage_num}:{len(self.panel)}")
         self.set_field(stage_num,Param)
 
     def set_field(self, stage_num, Param):
@@ -125,45 +142,18 @@ class SampleStage:
                 map_terrain = map_sample["terrain"]
                 terrain_size = len(map_terrain)
 
+                # print(f"第{stage_num}ステージ")
+
                 self.panel = PanelManager.PanelManager(
-                    map_data=map_data, # マップのコンフィグファイル
                     stage_data=map_sample# ステージのコンフィグファイル
-                )
-
-            #     for i in range(terrain_size):
-            #         get_terrain = map_terrain[i]
-
-            #         terrian_x_start = int(get_terrain["area"][0][0] * Param.tile_num)
-            #         terrian_x_end = int(get_terrain["area"][0][1] * Param.tile_num)
-            #         terrian_y_start = int(get_terrain["area"][1][0] * Param.tile_num)
-            #         terrian_y_end = int(get_terrain["area"][1][1] * Param.tile_num)
-
-            #         for x in range(terrian_x_start, terrian_x_end):
-            #             for y in range(terrian_y_start, terrian_y_end):
-            #                 self.panel[x][y] = Panel (
-            #                     has_building = False,
-            #                     building_strength = 1.0,
-            #                     shaking = 0.0,
-            #                     ground_strength = get_terrain["weakness"],
-            #                     terrain_type = get_terrain["type"]
-            #                 )
-            #                 # print(x,y,self.panel[x][y].terrain_type)
-
-            # for x in range(Param.tile_num):
-            #     for y in range(Param.tile_num):
-            #         if(self.panel[x][y] == None):
-            #             self.panel[x][y] = Panel (
-            #                 has_building = False,
-            #                 building_strength = 1.0,
-            #                 shaking = 0.0,
-            #                 ground_strength = 0.0,
-            #                 terrain_type = "その他"
-            #             )
+                ).get_all_panels()
     
 # ゲーム画面のオブジェクト
 class SampleObject:
     def __init__(self,Param):
         self.obj_num = 3
+
+        self.stage = None
 
         self.click = [[None] * Param.tile_num for _ in range(Param.tile_num)]
         
@@ -174,11 +164,11 @@ class SampleObject:
         self.set_obj_param(Param)
         # self.set_field()
 
-        self.select_obj_num = -1
+        self.select_obj_num = -1 # ユーザが選択中のオブジェクト番号
 
-        self.obj_catch = False
+        self.obj_catch = False # オブジェクトを掴んでいるかのフラグ
 
-        self.show_result = False
+        self.show_result = False # シミュレーション結果を表示する状態かのフラグ
 
     # def update(self, event, obj_catch):
     def update(self, event, Param):
@@ -210,29 +200,20 @@ class SampleObject:
             if event.key == pygame.K_SPACE:
                 if self.show_result == False:
                     self.show_result = True
-
-                    # TODO
-                    #マップ情報取得
-                    file_path = Path("../Config") / f"map_config.json"
-                    with open(file_path, "r", encoding="utf-8_sig") as f:
-                        map_data = json.load(f)
-                        grid_width = map_data["grid_width"] 
-                        grid_height = map_data["grid_height"] 
-
                     stage_num = Param.stage_num
                     
-                    with open(f"map_sample{stage_num}_config.json", "r") as f:
+                    with open(f"../Config/map_sample{stage_num}_config.json", "r", encoding="utf-8_sig") as f:
                         stage_data = json.load(f)
 
                     # 震源地を決める関数
-                    epicenter = DefineEpicenter.define_epicenter(
+                    epicenter = DefineEpicenter.DefineEpicenter.define_epicenter(
                         stage_data = stage_data # ステージのコンフィグファイル
                     )
                     # マグニチュードを決める関数
-                    magnitude = DefineMagnitude.define_magnitude(
+                    magnitude = DefineMagnitude.DefineMagnitude.define_magnitude(
                         stage_data = stage_data
                     )
-
+                    #地盤の脆さを決める関数
                     weakness_map_creator = DefineWeaknessMap(
                         stage_data = stage_data
                     )
@@ -241,20 +222,22 @@ class SampleObject:
                     sim = EQSimulatorVariableRho(
                             epicenter=epicenter, #震源​
                             magnitude=magnitude, #地震の規模​
-                            grid_shape= (grid_width, grid_height),
-                            rho_map = weakness_map,
+                            grid_shape= (Param.tile_width, Param.tile_height), #マップのグリッド情報
+                            rho_map = weakness_map, #地盤の脆さ
                             # rho_map=np.ones((grid_width, grid_height)), #地盤密度を持つ配列​
-                            mu=10.0, #弾性係数​
-                            dt=0.05
+                            mu=10.0, #弾性係数​（定数）
+                            dt=0.05 #定数(上げると地震の広がる規模が大きくなる)
                         )
-                    max_disp = sim.run(steps=200) #揺れの大きの最大値を持つ配列​
+                    max_disp = sim.run(steps=200) #揺れの大きの最大値を持つ配列（step数を上げると地震の広がる規模が大きくなる）​
 
                     pane = PanelManager.PanelManager(
-                        map_data=map_data, # マップのコンフィグファイル
                         stage_data=stage_data# ステージのコンフィグファイル
-                        )
-                    # pygame側でパネル情報（建物）を更新
-                    pane_result = pane.simulate(max_disp = max_disp)
+                    )
+                    # パネル情報（建物の破壊・非破壊）を更新
+                    pane_result = pane.simulate(max_disp=max_disp)
+
+                    self.stage.panel = pane_result
+
                     self.write_text(Param)
 
         self.draw_board(Param)
@@ -296,26 +279,44 @@ class SampleObject:
 
     # パネルの描画色を設定
     def set_panel_color(self, x, y, field):
-        if self.stage.panel[x][y].terrain_type == "山":
+        if self.stage.panel[x][y].terrain_type == "山地":
             pygame.draw.rect(screen, GREEN, field)
         elif self.stage.panel[x][y].terrain_type == "平地":
-            pygame.draw.rect(screen, BROWN, field)
+            pygame.draw.rect(screen, YELLOW, field)
         elif self.stage.panel[x][y].terrain_type == "海":
             pygame.draw.rect(screen, OCEAN, field)
+        elif self.stage.panel[x][y].terrain_type == "川":
+            pygame.draw.rect(screen, RIVER, field)
+        elif self.stage.panel[x][y].terrain_type == "埋立地":
+            pygame.draw.rect(screen, BROWN, field)
+        elif self.stage.panel[x][y].terrain_type == "三角州":
+            pygame.draw.rect(screen, DELTA, field)
+        elif self.stage.panel[x][y].terrain_type == "台地":
+            pygame.draw.rect(screen, PLATEAU, field)
         else:
             pygame.draw.rect(screen, BLACK, field)
-
+            
     #建物を描画 TODO
     def draw_building(self, x, y, name, Param):
+        stage_state = self.stage.panel[x][y].building_strength #建物があり、壊れていれば -1 を返す
 
         if name == "民家":
-            building_image = pygame.image.load('Images/house.png')
+            if stage_state == -1: #壊れている
+                building_image = pygame.image.load('../Images/house_broken.png')
+            else:
+                building_image = pygame.image.load('../Images/house.png')
         elif name == "商業ビル":
-            building_image = pygame.image.load('Images/depart.png')
+            if stage_state == -1: #壊れている
+                building_image = pygame.image.load('../Images/depart_broken.png')
+            else:
+                building_image = pygame.image.load('../Images/depart.png')
         elif name == "発電所":
-            building_image = pygame.image.load('Images/generator.png')
-        
-        
+            if stage_state == -1: #壊れている
+                building_image = pygame.image.load('../Images/generator_broken.png')
+            else:
+                building_image = pygame.image.load('../Images/generator.png')
+
+
         building_image_resize = pygame.transform.scale(building_image, (Param.GRID_SIZE, Param.GRID_SIZE))
         building_image_rect = building_image.get_rect()
         building_image_rect = (x * Param.GRID_SIZE, y * Param.GRID_SIZE)
@@ -415,7 +416,8 @@ class SampleObject:
         pygame.draw.rect(screen, BLACK, text_rect)
         for x in range(Param.tile_num):
             for y in range(Param.tile_num):
-                if self.stage.panel[x][y].has_building == True:
+                if self.stage.panel[x][y].building_type >= 1: # 建物があるなら
+                    # TODO 建物の状態と結果を表示
                     text = "building_pos=" + str(x) + "," + str(y) + "," + self.stage.panel[x][y].terrain_type
                     print(text)
                     screen_text = default_font.render(text, True, WHITE)
@@ -442,7 +444,7 @@ class SampleObject:
 # ステージ選択画面
 class StageSelect:
     def __init__(self, Param):
-        self.MAX_STAGE_NUM = 3 # ステージの総数
+        self.MAX_STAGE_NUM = MAX_STAGE_NUM # ステージの総数
 
         self.stage_num = 0
 
@@ -474,20 +476,38 @@ class StageSelect:
     #ボードを描画
     def draw_board(self, stage_num, Param):
         screen.fill(BLACK) #画面全体を緑で塗りつぶす
+        # print(f"ステージ番号: {stage_num}, タイル数: {Param.tile_num}")
+        # print(f"{self.stage[stage_num].panel}") # Nonetype
 
         for x in range(Param.tile_num):
             for y in range(Param.tile_num):
                 field = pygame.Rect(x * Param.GRID_SIZE + HOR_MARGIN_SIZE//2, y * Param.GRID_SIZE + VAR_MARGIN_SIZE, Param.GRID_SIZE, Param.GRID_SIZE) 
                 
-                if self.stage[stage_num].panel[x][y].terrain_type == "山":
+                # if self.stage[stage_num].panel[x][y].terrain_type == "山":
+                #     pygame.draw.rect(screen, GREEN, field)
+                # elif self.stage[stage_num].panel[x][y].terrain_type == "平地":
+                #     pygame.draw.rect(screen, BROWN, field)
+                # elif self.stage[stage_num].panel[x][y].terrain_type == "海":
+                #     pygame.draw.rect(screen, OCEAN, field)
+                # else:
+                #     pygame.draw.rect(screen, BLACK, field)
+                if self.stage[stage_num].panel[x][y].terrain_type == "山地":
                     pygame.draw.rect(screen, GREEN, field)
                 elif self.stage[stage_num].panel[x][y].terrain_type == "平地":
-                    pygame.draw.rect(screen, BROWN, field)
+                    pygame.draw.rect(screen, YELLOW, field)
                 elif self.stage[stage_num].panel[x][y].terrain_type == "海":
                     pygame.draw.rect(screen, OCEAN, field)
+                elif self.stage[stage_num].panel[x][y].terrain_type == "川":
+                    pygame.draw.rect(screen, RIVER, field)
+                elif self.stage[stage_num].panel[x][y].terrain_type == "埋立地":
+                    pygame.draw.rect(screen, BROWN, field)
+                elif self.stage[stage_num].panel[x][y].terrain_type == "三角州":
+                    pygame.draw.rect(screen, DELTA, field)
+                elif self.stage[stage_num].panel[x][y].terrain_type == "台地":
+                    pygame.draw.rect(screen, PLATEAU, field)
                 else:
                     pygame.draw.rect(screen, BLACK, field)
-
+                
                 rect = pygame.Rect(x * Param.GRID_SIZE + HOR_MARGIN_SIZE//2, y * Param.GRID_SIZE + VAR_MARGIN_SIZE, Param.GRID_SIZE, Param.GRID_SIZE) #各マスの位置とサイズを定義するためのrectを作成
                 pygame.draw.rect(screen, BLACK, rect, 1) #定義したrectを描画
 
@@ -531,6 +551,7 @@ def main():
                 if event.key == pygame.K_RETURN:
                     window = 1 # 建物配置画面へ移行
                     game.get_stage(stage_select.stage_num, param) # ゲーム側にステージ情報を渡す
+                    param.set_stage_num(stage_select.stage_num) # ステージ番号を設定
                     screen.fill(BLACK) #画面全体を塗りつぶす
 
             match window:
@@ -552,6 +573,5 @@ def main():
 if __name__ == "__main__":
     main()
 
-# TODO: 地震の発生しうる場所を描画
-# TODO: シミュレーションの結果を表示（描画の切り替え）
-# TODO: stage_numをステージ選択画面からParamに与える
+# TODO: 地震の発生しうる場所を描画（）
+# TODO: シミュレーションの結果を表示（描画の切り替え）(write_text 関数の書き換え)

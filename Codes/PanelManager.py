@@ -3,38 +3,49 @@ import numpy as np
 import math
 from pathlib import Path
 import matplotlib.pyplot as plt
+import ast  # 文字列を安全にPythonオブジェクトに変換するため
 
-import main
+import main  # Panelクラスを使うため
+
 
 class PanelManager:
-    def __init__(self, map_data, stage_data):
-        self.tile_width = map_data["grid_width"]
-        self.tile_height = map_data["grid_height"]
-        self._set_panels(stage_data=stage_data)
+    def __init__(self, stage_data):
+        self.tile_width = stage_data["map_settings"]["grid_size"]["width"]
+        self.tile_height = stage_data["map_settings"]["grid_size"]["height"]
         self.panels_list = None
+        self.panels = None
+        self._set_panels(stage_data=stage_data)
 
     def _set_panels(self, stage_data=None):
         if stage_data is None:
             raise ValueError("stage_data が指定されていません。")
 
         w, h = self.tile_width, self.tile_height
-        panels_array = np.empty((w, h), dtype=object)  # <== (x, y)順
+        panels_array = np.empty((w, h), dtype=object)  # (x, y)順
 
         for x in range(w):
             for y in range(h):
                 panels_array[x, y] = None
 
         for terrain in stage_data["terrain"]:
-            x0_ratio, x1_ratio = terrain["area"][0]
-            y0_ratio, y1_ratio = terrain["area"][1]
+            # area を文字列から配列に変換
+            if isinstance(terrain["area"], str):
+                area = ast.literal_eval(terrain["area"])
+            else:
+                area = terrain["area"]
 
-            print(f"設定中の地形: {terrain['type']} ({x0_ratio}, {y0_ratio}) to ({x1_ratio}, {y1_ratio})")
+            x0_ratio, x1_ratio = area[0]
+            y0_ratio, y1_ratio = area[1]
 
+            # print(f"設定中の地形: {terrain['type']} ({x0_ratio}, {y0_ratio}) to ({x1_ratio}, {y1_ratio})")
+
+            # 割合 → グリッド番号
             x0 = int(math.floor(x0_ratio * w))
             x1 = int(math.ceil(x1_ratio * w))
             y0 = int(math.floor(y0_ratio * h))
             y1 = int(math.ceil(y1_ratio * h))
 
+            # 範囲クリップ
             x0 = max(0, min(x0, w))
             x1 = max(0, min(x1, w))
             y0 = max(0, min(y0, h))
@@ -58,11 +69,12 @@ class PanelManager:
                     )
                     panels_array[x, y] = panel
 
+        # 未設定パネルをデフォルト値で初期化
         for x in range(w):
             for y in range(h):
                 if panels_array[x, y] is None:
                     panels_array[x, y] = main.Panel(
-                        has_building=False,
+                        building_type=0,
                         building_strength=0.0,
                         shaking=0.0,
                         ground_strength=0.5,
@@ -73,7 +85,9 @@ class PanelManager:
 
     def simulate(self, max_disp):
         if max_disp.shape != (self.tile_width, self.tile_height):
-            raise ValueError(f"max_disp のサイズが一致しません。期待: ({self.tile_width}, {self.tile_height})\n実際: {max_disp.shape}")
+            raise ValueError(
+                f"max_disp のサイズが一致しません。期待: ({self.tile_width}, {self.tile_height})\n実際: {max_disp.shape}"
+            )
 
         for x in range(self.tile_width):
             for y in range(self.tile_height):
@@ -81,42 +95,38 @@ class PanelManager:
                 shaking = max_disp[x, y]
                 panel.shaking = shaking
 
-                # 耐震性: 建物の強さ × 地盤の強さ（TODO：バランス調整）
-                alpha = 0.5  # 地震の影響を調整する係数
+                # 耐震性: 建物の強さ × 地盤の強さ × 係数
+                alpha = 0.5
                 resistance = panel.building_strength * panel.ground_strength * alpha
 
                 # 建物あり & 揺れ > 耐震性 → 壊れる
                 if panel.building_type > 0 and shaking > resistance:
-                    panel.building_strength = -1  # 壊れた建物
+                    panel.building_strength = -1
 
                 self.panels[x, y] = panel
 
         return self.panels
 
+    # 結果を計算する関数
     def calculate_result(self):
-            """
-            パネルの状態からスコアを計算する
-            """
-            total_score = 0
-            building_scores = {
-                1: 100,   # 民家
-                2: 500,   # 商業ビル
-                3: 2000   # 発電所
-            }
+        total_score = 0
+        building_scores = {
+            1: 100,   # 民家
+            2: 500,   # 商業ビル
+            3: 2000   # 発電所
+        }
 
-            for x in range(self.tile_width):
-                for y in range(self.tile_height):
-                    panel = self.panels[x, y]
-                    if panel.building_type > 0 and panel.building_strength >= 0:
-                        score = building_scores.get(panel.building_type, 0)
-                        total_score += score
+        for x in range(self.tile_width):
+            for y in range(self.tile_height):
+                panel = self.panels[x, y]
+                if panel.building_type > 0 and panel.building_strength >= 0:
+                    score = building_scores.get(panel.building_type, 0)
+                    total_score += score
 
-            return total_score
+        return total_score
 
+    # デバッグ用出力関数
     def showPanelState(self, output_path="../Debug_folder/show_panel_state.json", show_limit=5):
-        '''
-        パネルの状態を表示する（受けた震度：max_disp）
-        '''
         panel_data = []
         shaking_map = np.zeros((self.tile_width, self.tile_height), dtype=float)
 
@@ -126,7 +136,7 @@ class PanelManager:
                 data = {
                     "x": x,
                     "y": y,
-                    "has_building": panel.has_building,
+                    "building_type": panel.building_type,
                     "building_strength": panel.building_strength,
                     "shaking": panel.shaking,
                     "ground_strength": panel.ground_strength,
@@ -136,6 +146,7 @@ class PanelManager:
                 shaking_map[x, y] = panel.shaking
 
         if output_path:
+            Path(output_path).parent.mkdir(parents=True, exist_ok=True)
             with open(output_path, 'w', encoding='utf-8') as f:
                 json.dump(panel_data, f, ensure_ascii=False, indent=2)
             print(f"パネル情報を {output_path} に出力しました。")
@@ -151,25 +162,21 @@ class PanelManager:
 
         plt.show()
 
+    # パネルを取得する関数
+    def get_all_panels(self):
+        return self.panels
+
+    def get_panel(self, x, y):
+        if 0 <= x < self.tile_width and 0 <= y < self.tile_height:
+            return self.panels[x, y]
+        else:
+            raise IndexError(f"パネルのインデックスが範囲外です: ({x}, {y})")
 
 
 if __name__ == "__main__":
-    # デバッグ用のパネルマネージャーを作成
-    map_data = {
-        "grid_width": 10,
-        "grid_height": 10
-    }
-    
-    stage_data = {
-        "terrain": [
-            {
-                "type": "plain",
-                "weakness": 0.1,
-                "area": [[0, 9], [0, 9]]
-            }
-        ]
-    }
+    # JSONファイルから読み込み
+    with open("../Config/map_sample2_config.json", "r", encoding="utf-8") as f:
+        stage_data = json.load(f)
 
-    panel_manager = PanelManager(map_data=map_data, stage_data=stage_data)
-    panels = panel_manager.simulate(max_disp=np.random.rand(10, 10) * 100)
-    panel_manager.showPanelState()
+    panel_manager = PanelManager(stage_data=stage_data)
+    # panel_manager.showPanelState(output_path="../Debug_folder/panel_state.json")
