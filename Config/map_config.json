@@ -1,6 +1,6 @@
 {
-    "map_width": 50, 
-    "map_height": 50,
-    "tile_width":50,
-    "tile_height":50
+    "map_width": 25, 
+    "map_height": 25,
+    "tile_width":25,
+    "tile_height":25
 }

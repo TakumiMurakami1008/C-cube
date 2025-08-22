@@ -1,8 +1,8 @@
 {
     "map_settings": {
         "grid_size": {
-            "width": 50,
-            "height": 50
+            "width": 25,
+            "height": 25
         },
         "latitude_range": "[30, 45]",
         "longitude_range": "[130, 145]"
@@ -51,49 +51,49 @@
     "terrain": [
         {
             "type": "海",
-            "area": "[[0.0, 0.3], [0.0, 1.0]]",
+            "area": "[[0.7, 1.0], [0.0, 1]]",
+            "weakness": 0.9,
+            "disaster_risk": "津波",
+            "ground_type": "軟弱地盤"
+        },   
+        {
+            "type": "海",
+            "area": "[[0.5, 0.7], [0.0, 0.3]]",
             "weakness": 0.9,
             "disaster_risk": "津波",
             "ground_type": "軟弱地盤"
         },
         {
-            "type": "川",
-            "area": "[[0.3, 0.5], [0.0, 1.0]]",
-            "weakness": 0.7,
-            "disaster_risk": "氾濫",
+            "type": "海",
+            "area": "[[0.5, 0.7], [0.7, 1]]",
+            "weakness": 0.9,
+            "disaster_risk": "津波",
             "ground_type": "軟弱地盤"
         },
         {
-            "type": "平地",
-            "area": "[[0.3, 0.5], [0.0, 1.0]]",
-            "weakness": 0.7,
-            "disaster_risk": "火災",
-            "ground_type": "沖積層"
-        },
-        {
             "type": "埋立地",
-            "area": "[[0.3, 0.5], [0.0, 1.0]]",
-            "weakness": 0.7,
-            "disaster_risk": "液状化",
-            "ground_type": "沖積層"
-        },
-        {
-            "type": "三角州",
-            "area": "[[0.3, 0.5], [0.0, 1.0]]",
+            "area": "[[0.5, 0.7], [0.3, 0.7]]",
             "weakness": 0.7,
             "disaster_risk": "液状化",
             "ground_type": "沖積層"
         },
         {
             "type": "台地",
-            "area": "[[0.3, 0.5], [0.0, 1.0]]",
+            "area": "[[0.0, 0.3], [0.0, 0.7]]",
             "weakness": 0.7,
             "disaster_risk": "地割れ",
             "ground_type": "沖積層"
         },
         {
+            "type": "平地",
+            "area": "[[0.3, 0.5], [0.0, 0.7]]",
+            "weakness": 0.7,
+            "disaster_risk": "液状化",
+            "ground_type": "沖積層"
+        },
+        {
             "type": "山地",
-            "area": "[[0.5, 1.0], [0.0, 1.0]]",
+            "area": "[[0, 0.5], [0.7, 1]]",
             "weakness": 0.5,
             "disaster_risk": "土砂災害",
             "ground_type": "岩盤"

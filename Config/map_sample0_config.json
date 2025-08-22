@@ -1,8 +1,8 @@
 {
     "map_settings": {
         "grid_size": {
-            "width": 50,
-            "height": 50
+            "width": 25,
+            "height": 25
         },
         "latitude_range": "[30, 45]",
         "longitude_range": "[130, 145]"

@@ -4,11 +4,12 @@ import json
 from pathlib import Path
 
 from dataclasses import dataclass
-import DefineEpicenter
+from DefineEpicenter_copy import DefineEpicenter
 import DefineMagnitude
 from DefineWeaknessMap import DefineWeaknessMap
 from EQSimulator import EQSimulatorVariableRho
 import PanelManager
+import result_inf
 
 # 色設定
 BLACK = (0,0,0)
@@ -28,7 +29,7 @@ DELTA = (128, 128, 0) # 三角州
 MAX_OBJECT = 3
 
 # マップの最大値
-MAX_STAGE_NUM = 2
+MAX_STAGE_NUM = 3
 
 #マップサイズ
 SIZE = 500
@@ -42,7 +43,10 @@ VAR_MARGIN_SIZE = VAR_SIZE-SIZE
 HOR_MARGIN_SIZE = HOR_SIZE-SIZE
 
 #フォントサイズ
-FONT_SIZE = (VAR_MARGIN_SIZE) // MAX_OBJECT
+FONT_SIZE = (VAR_MARGIN_SIZE) * 0.5 // MAX_OBJECT 
+
+#ゲームフェーズ 0:ステージ選択, 1:建物配置, 2:シミュレーション中, 3:結果発表
+flag = 0
 
 #pygameの初期化
 
@@ -51,7 +55,10 @@ pygame.init()
 screen = pygame.display.set_mode((HOR_SIZE,VAR_SIZE))
 pygame.display.set_caption('ゆれマネ！～地震災害マネジメント・シミュレータ～') #ウィンドウのタイトルを設定
 
-default_font = pygame.font.SysFont(None, FONT_SIZE)
+# default_font = pygame.font.SysFont(None, FONT_SIZE)
+font_path = "NotoSansJP-VariableFont_wght.ttf"
+font = pygame.font.Font(font_path, int(FONT_SIZE))
+
 
 # ステージパラメータのクラス
 class Param:
@@ -139,13 +146,15 @@ class SampleStage:
                 self.latitiude = map_settings["latitude_range"] 
                 self.longtitude = map_settings["longitude_range"]
 
+                self.stage_data = map_sample
+
                 map_terrain = map_sample["terrain"]
                 terrain_size = len(map_terrain)
 
                 # print(f"第{stage_num}ステージ")
 
                 self.panel = PanelManager.PanelManager(
-                    stage_data=map_sample# ステージのコンフィグファイル
+                    stage_data=map_sample, # ステージのコンフィグファイル
                 ).get_all_panels()
     
 # ゲーム画面のオブジェクト
@@ -169,6 +178,8 @@ class SampleObject:
         self.obj_catch = False # オブジェクトを掴んでいるかのフラグ
 
         self.show_result = False # シミュレーション結果を表示する状態かのフラグ
+
+        self.field_switcth = 0 # 震源地になる可能性のあるマスを表示する画面に切り替えるフラグ
 
     # def update(self, event, obj_catch):
     def update(self, event, Param):
@@ -201,14 +212,27 @@ class SampleObject:
                 if self.show_result == False:
                     self.show_result = True
                     stage_num = Param.stage_num
+
+                    for i in range (10):
+                        self.draw_board_right(Param)
+                        pygame.display.flip() #画面を更新して描画内容を表示
+                        pygame.time.wait(20)
+                        self.draw_board_left(Param)
+                        pygame.display.flip() #画面を更新して描画内容を表示
+                        pygame.time.wait(20)
                     
                     with open(f"../Config/map_sample{stage_num}_config.json", "r", encoding="utf-8_sig") as f:
                         stage_data = json.load(f)
 
                     # 震源地を決める関数
-                    epicenter = DefineEpicenter.DefineEpicenter.define_epicenter(
-                        stage_data = stage_data # ステージのコンフィグファイル
+                    epicenter = DefineEpicenter.define_epicenter(
+                        self.epicenter_line, 
+                        self.get_stage
                     )
+                    # epicenter = DefineEpicenter.DefineEpicenter.define_epicenter(
+                    #     stage_data = stage_data # ステージのコンフィグファイル
+                    # )
+
                     # マグニチュードを決める関数
                     magnitude = DefineMagnitude.DefineMagnitude.define_magnitude(
                         stage_data = stage_data
@@ -229,8 +253,9 @@ class SampleObject:
                             dt=0.05 #定数(上げると地震の広がる規模が大きくなる)
                         )
                     max_disp = sim.run(steps=200) #揺れの大きの最大値を持つ配列（step数を上げると地震の広がる規模が大きくなる）​
-
+                    # print(f"self.stage.panel: {self.stage.panel},\nlength:{len(self.stage.panel)}")
                     pane = PanelManager.PanelManager(
+                        panel_origin = self.stage.panel,
                         stage_data=stage_data# ステージのコンフィグファイル
                     )
                     # パネル情報（建物の破壊・非破壊）を更新
@@ -238,10 +263,76 @@ class SampleObject:
 
                     self.stage.panel = pane_result
 
+                    print("aaaaa")
+
                     self.write_text(Param)
+                    self.field_switcth = 0
 
-        self.draw_board(Param)
+            if event.key == pygame.K_f:
+                # self.get_stage = DefineEpicenter.get_stage_data(self.stage.stage_data)
+                # self.epicenter_line = DefineEpicenter.calcrate_line(self.get_stage)
+                # self.epicenter_area = DefineEpicenter.calcrate_area(self.get_stage)
+                if self.field_switcth == 0:
+                    self.field_switcth = 1
+                elif self.field_switcth == 1:
+                    self.field_switcth = 0
 
+        # self.draw_board(Param)
+
+        match self.field_switcth:
+            case 0:
+                self.draw_board(Param)
+
+            case 1:
+                self.draw_epicenter(Param)
+
+    def draw_board_right(self, Param):
+        # screen.fill(BLACK) #画面全体を緑で塗りつぶす
+        start_rect = pygame.Rect(SIZE, 0, HOR_MARGIN_SIZE, SIZE)
+        pygame.draw.rect(screen, GRAY, start_rect)
+
+        for x in range(Param.tile_num):
+            for y in range(Param.tile_num):
+                field = pygame.Rect(x * Param.GRID_SIZE+10, y * Param.GRID_SIZE, Param.GRID_SIZE, Param.GRID_SIZE) 
+
+                self.set_panel_color(x, y, field)
+
+                rect = pygame.Rect(x * Param.GRID_SIZE+10, y * Param.GRID_SIZE, Param.GRID_SIZE, Param.GRID_SIZE) #各マスの位置とサイズを定義するためのrectを作成
+                pygame.draw.rect(screen, BLACK, rect, 1) #定義したrectを描画
+
+                for i in range(MAX_OBJECT):
+                    if self.is_obj(x,y, i):
+                        self.draw_building(x, y, self.obj[i].name, Param)
+
+        pygame.draw.rect(screen, GRAY, start_rect)
+        for y in range(int(Param.VAR_GRID_NUM)):
+            for i in range(MAX_OBJECT):
+                if self.is_obj(Param.HOR_GRID_NUM-1, y, i):
+                    self.draw_building(Param.HOR_GRID_NUM-1, y, self.obj[i].name, Param)
+
+    def draw_board_left(self, Param):
+        # screen.fill(BLACK) #画面全体を緑で塗りつぶす
+        start_rect = pygame.Rect(SIZE, 0, HOR_MARGIN_SIZE, SIZE)
+        pygame.draw.rect(screen, GRAY, start_rect)
+
+        for x in range(Param.tile_num):
+            for y in range(Param.tile_num):
+                field = pygame.Rect(x * Param.GRID_SIZE-10, y * Param.GRID_SIZE, Param.GRID_SIZE, Param.GRID_SIZE) 
+
+                self.set_panel_color(x, y, field)
+
+                rect = pygame.Rect(x * Param.GRID_SIZE-10, y * Param.GRID_SIZE, Param.GRID_SIZE, Param.GRID_SIZE) #各マスの位置とサイズを定義するためのrectを作成
+                pygame.draw.rect(screen, BLACK, rect, 1) #定義したrectを描画
+
+                for i in range(MAX_OBJECT):
+                    if self.is_obj(x,y, i):
+                        self.draw_building(x, y, self.obj[i].name, Param)
+
+        pygame.draw.rect(screen, GRAY, start_rect)
+        for y in range(int(Param.VAR_GRID_NUM)):
+            for i in range(MAX_OBJECT):
+                if self.is_obj(Param.HOR_GRID_NUM-1, y, i):
+                    self.draw_building(Param.HOR_GRID_NUM-1, y, self.obj[i].name, Param)
 
     # 画面の描画更新
     def draw_board(self, Param):
@@ -322,6 +413,111 @@ class SampleObject:
         building_image_rect = (x * Param.GRID_SIZE, y * Param.GRID_SIZE)
         screen.blit(building_image_resize, building_image_rect)
 
+    def draw_epicenter(self, Param):
+        start_rect = pygame.Rect(SIZE, 0, HOR_MARGIN_SIZE, SIZE)
+        pygame.draw.rect(screen, GRAY, start_rect)
+
+        for x in range(Param.tile_num):
+            for y in range(Param.tile_num):
+                field = pygame.Rect(x * Param.GRID_SIZE, y * Param.GRID_SIZE, Param.GRID_SIZE, Param.GRID_SIZE) 
+                
+                if (self.check_epicenter(x, y, Param)):
+                    pygame.draw.rect(screen, RED, field)
+                else:
+                    pygame.draw.rect(screen, (150, 150, 150), field)
+
+                # if(int(self.epicenter_area[0][0]) == x and int(self.epicenter_area[0][1]) == y):
+                #     pygame.draw.rect(screen, BLUE, field)
+                # if(int(self.epicenter_area[1][0]) == x and int(self.epicenter_area[1][1]) == y):
+                #     pygame.draw.rect(screen, YELLOW, field)
+                # if(int(self.epicenter_area[2][0]) == x and int(self.epicenter_area[2][1]) == y):
+                #     pygame.draw.rect(screen, GREEN, field)
+                # if(int(self.epicenter_area[3][0]) == x and int(self.epicenter_area[3][1]) == y):
+                #     pygame.draw.rect(screen, BROWN, field)
+
+                # if(int(self.epicenter_area[0][1]) == x and int(self.epicenter_area[0][0]) == y):
+                #     pygame.draw.rect(screen, BLUE, field)
+                # if(int(self.epicenter_area[1][1]) == x and int(self.epicenter_area[1][0]) == y):
+                #     pygame.draw.rect(screen, YELLOW, field)
+                # if(int(self.epicenter_area[2][1]) == x and int(self.epicenter_area[2][0]) == y):
+                #     pygame.draw.rect(screen, GREEN, field)
+                # if(int(self.epicenter_area[3][1]) == x and int(self.epicenter_area[3][0]) == y):
+                #     pygame.draw.rect(screen, BROWN, field)
+
+                rect = pygame.Rect(x * Param.GRID_SIZE, y * Param.GRID_SIZE, Param.GRID_SIZE, Param.GRID_SIZE) #各マスの位置とサイズを定義するためのrectを作成
+                pygame.draw.rect(screen, BLACK, rect, 1) #定義したrectを描画
+
+                if self.click[x][y] is not None:
+                    rect = pygame.Rect(x * Param.GRID_SIZE, y * Param.GRID_SIZE, Param.GRID_SIZE, Param.GRID_SIZE) #各マスの位置とサイズを定義するためのrectを作成
+                    pygame.draw.rect(screen, WHITE, rect, 2) #定義したrectを描画
+
+                for i in range(MAX_OBJECT):
+                    if self.is_obj(x,y, i):
+                        self.draw_building(x, y, self.obj[i].name, Param)
+
+        pygame.draw.rect(screen, GRAY, start_rect)
+        for y in range(int(Param.VAR_GRID_NUM)):
+            if self.start_click[y] is not None:
+                rect = pygame.Rect((Param.HOR_GRID_NUM-1) * Param.GRID_SIZE, y * Param.GRID_SIZE, Param.GRID_SIZE, Param.GRID_SIZE) #各マスの位置とサイズを定義するためのrectを作成
+                pygame.draw.rect(screen, BLACK, rect, 2) #定義したrectを描画
+
+            for i in range(MAX_OBJECT):
+                if self.is_obj(Param.HOR_GRID_NUM-1,y, i):
+                    self.draw_building(Param.HOR_GRID_NUM-1, y, self.obj[i].name, Param)
+
+    def check_epicenter(self, x, y, Param):
+        gradient_12 = ((self.epicenter_area[0][1]) - (self.epicenter_area[1][1]))/((self.epicenter_area[0][0]) - (self.epicenter_area[1][0]))
+        gradient_13 = ((self.epicenter_area[0][1]) - (self.epicenter_area[2][1]))/((self.epicenter_area[0][0]) - (self.epicenter_area[2][0]))
+        gradient_24 = ((self.epicenter_area[1][1]) - (self.epicenter_area[3][1]))/((self.epicenter_area[1][0]) - (self.epicenter_area[3][0]))
+        gradient_34 = ((self.epicenter_area[2][1]) - (self.epicenter_area[3][1]))/((self.epicenter_area[2][0]) - (self.epicenter_area[3][0]))
+
+        # intercept_12 = gradient_12*(-(self.epicenter_area[0][0]+Param.GRID_SIZE)) + (self.epicenter_area[0][1]+Param.GRID_SIZE)
+        # intercept_13 = gradient_13*(-(self.epicenter_area[0][0]+Param.GRID_SIZE)) + (self.epicenter_area[0][1]+Param.GRID_SIZE)
+        # intercept_24 = gradient_24*(-(self.epicenter_area[1][0]+Param.GRID_SIZE)) + (self.epicenter_area[1][1]-Param.GRID_SIZE)
+        # intercept_34 = gradient_34*(-(self.epicenter_area[3][0]-Param.GRID_SIZE)) + (self.epicenter_area[3][1]-Param.GRID_SIZE)
+
+        intercept_12 = gradient_12*(-(self.epicenter_area[0][0])) + (self.epicenter_area[0][1])
+        intercept_13 = gradient_13*(-(self.epicenter_area[0][0])) + (self.epicenter_area[0][1])
+        intercept_24 = gradient_24*(-(self.epicenter_area[1][0])) + (self.epicenter_area[1][1])
+        intercept_34 = gradient_34*(-(self.epicenter_area[3][0])) + (self.epicenter_area[3][1])
+
+        # gradient_12 = ((self.epicenter_area[0][0]) - (self.epicenter_area[1][0]))/((self.epicenter_area[0][1]) - (self.epicenter_area[1][1]))
+        # gradient_13 = ((self.epicenter_area[0][0]) - (self.epicenter_area[2][0]))/((self.epicenter_area[0][1]) - (self.epicenter_area[2][1]))
+        # gradient_24 = ((self.epicenter_area[1][0]) - (self.epicenter_area[3][0]))/((self.epicenter_area[1][1]) - (self.epicenter_area[3][1]))
+        # gradient_34 = ((self.epicenter_area[2][0]) - (self.epicenter_area[3][0]))/((self.epicenter_area[2][1]) - (self.epicenter_area[3][1]))
+
+        # intercept_12 = gradient_12*(-(self.epicenter_area[0][1]+Param.GRID_SIZE)) + (self.epicenter_area[0][0]-Param.GRID_SIZE)
+        # intercept_13 = gradient_13*(-(self.epicenter_area[0][1]+Param.GRID_SIZE)) + (self.epicenter_area[0][0]-Param.GRID_SIZE)
+        # intercept_24 = gradient_24*(-(self.epicenter_area[1][1]+Param.GRID_SIZE)) + (self.epicenter_area[1][0]+Param.GRID_SIZE)
+        # intercept_34 = gradient_34*(-(self.epicenter_area[2][1]-Param.GRID_SIZE)) + (self.epicenter_area[2][0]-Param.GRID_SIZE)
+
+        # intercept_12 = gradient_12*(-(self.epicenter_area[0][1])) + (self.epicenter_area[0][0])
+        # intercept_13 = gradient_13*(-(self.epicenter_area[0][1])) + (self.epicenter_area[0][0])
+        # intercept_24 = gradient_24*(-(self.epicenter_area[1][1])) + (self.epicenter_area[1][0])
+        # intercept_34 = gradient_34*(-(self.epicenter_area[2][1])) + (self.epicenter_area[2][0])
+
+        # print("12 : y= " + str(gradient_12) + " x + " + str(intercept_12))
+        # print("13 : y= " + str(gradient_13) + " x + " + str(intercept_13))
+        # print("24 : y= " + str(gradient_24) + " x + " + str(intercept_24))
+        # print("34 : y= " + str(gradient_34) + " x + " + str(intercept_34))
+
+        pygame.draw.line(screen, BLACK, self.epicenter_line[0]*Param.GRID_SIZE, self.epicenter_line[1]*Param.GRID_SIZE, width=3)
+
+        if(y <= gradient_12*x + intercept_12):
+            if(y <= gradient_13*x + intercept_13):
+                if(y >= gradient_24*x + intercept_24):
+                    if(y >= gradient_34*x + intercept_34):
+
+        # if(y <= gradient_12*x + intercept_12):
+        #     if(y >= gradient_13*x + intercept_13):
+        #         if(y <= gradient_24*x + intercept_24):
+        #             if(y >= gradient_34*x + intercept_34):
+        
+                        # print("point " + str(x) + ", " + str(y) + " is epicenter")
+                        return True
+                    
+        return False
+
     # 建物オブジェクトが選択した座標にあるか判定（プレイヤの操作時使用）
     def is_obj(self, x, y, obj_num):            
         if self.obj[obj_num].pos_x == x and self.obj[obj_num].pos_y == y:
@@ -339,7 +535,7 @@ class SampleObject:
                     if self.obj[i].pos_x == x and self.obj[i].pos_y == y:
                         self.select_obj_num = self.obj[i].num
                         print(self.select_obj_num)
-                        self.stage.panel[x][y].has_building = False
+                        self.stage.panel[x][y].building_type = -1
                     self.click[x][y] = RED
                     return True
         
@@ -368,6 +564,7 @@ class SampleObject:
         if can_put:
             print("put")
             print(x,y)
+            
             # self. board[x][y] = BLACK
 
             if self.obj[self.select_obj_num].first_select:
@@ -381,7 +578,18 @@ class SampleObject:
             self.obj[self.select_obj_num].pos_y = y
 
             print(self.select_obj_num)
-            self.stage.panel[x][y].has_building = True
+            if self.obj[self.select_obj_num].name == "民家":
+                self.stage.panel[x][y].building_type = 1
+                self.stage.panel[x][y].building_strength = 0.5
+            elif self.obj[self.select_obj_num].name == "商業ビル":
+                self.stage.panel[x][y].building_type = 2
+                self.stage.panel[x][y].building_strength = 0.7
+            elif self.obj[self.select_obj_num].name == "発電所":
+                self.stage.panel[x][y].building_type = 3
+                self.stage.panel[x][y].building_strength = 1.0
+            else:
+                print(f"error: obj_num={self.select_obj_num}")
+            # print(f"[{x}][{y}]:{self.stage.panel[x][y].building_type}")
             self.select_obj_num = -1
             return True
         return False
@@ -414,16 +622,62 @@ class SampleObject:
         text_num = 0
         text_rect = pygame.Rect(0, SIZE, HOR_SIZE, VAR_MARGIN_SIZE)
         pygame.draw.rect(screen, BLACK, text_rect)
-        for x in range(Param.tile_num):
-            for y in range(Param.tile_num):
-                if self.stage.panel[x][y].building_type >= 1: # 建物があるなら
-                    # TODO 建物の状態と結果を表示
-                    text = "building_pos=" + str(x) + "," + str(y) + "," + self.stage.panel[x][y].terrain_type
-                    print(text)
-                    screen_text = default_font.render(text, True, WHITE)
-                    screen_pos = (10, SIZE+FONT_SIZE*text_num)
-                    screen.blit(screen_text, screen_pos)
-                    text_num = text_num+1
+
+        # unbroken_building_count = 0
+        # broken_building_count = 0 
+        # for x in range(Param.tile_num):
+        #     for y in range(Param.tile_num):
+        #         # print(f"[{x},{y}]:{self.stage.panel[x][y].building_type}")
+        #         if self.stage.panel[x][y].building_type >= 1: # 建物があるなら
+        #             if self.stage.panel[x][y].building_strength <= 0:
+        #                 broken_building_count += 1
+        #             else:
+        #                 unbroken_building_count += 1
+
+        # 最終結果表示
+
+
+        collapse_count, survive_count, total_score = \
+            result_inf.calc_building_stats(pane_result = self.stage.panel, 
+                                           building_config_path = "../Config/building_config.json"
+                                           )
+
+        # for x in range(Param.tile_num):
+        #     for y in range(Param.tile_num):
+        #         # print(f"[{x},{y}]:{self.stage.panel[x][y].building_type}")
+        #         if self.stage.panel[x][y].building_type >= 1: # 建物があるなら
+        #             # TODO 建物の状態と結果を表示
+        #             text = "building_pos=" + str(x) + "," + str(y) + "," + self.stage.panel[x][y].terrain_type
+        #             print(text)
+        #             screen_text = font.render(text, True, WHITE)
+        #             screen_pos = (10, SIZE+FONT_SIZE*text_num)
+        #             screen.blit(screen_text, screen_pos)
+        #             text_num = text_num+1
+
+
+        text = f"壊れた建物数: {collapse_count}"
+        print(text)
+        screen_text = font.render(text, True, WHITE)
+        screen_pos = (10, SIZE+FONT_SIZE*text_num)
+        screen.blit(screen_text, screen_pos)
+        text_num = text_num+1
+
+
+        text = f"壊れなかった建物数: {survive_count}"
+        print(text)
+        screen_text = font.render(text, True, WHITE)
+        screen_pos = (10, SIZE+FONT_SIZE*text_num)
+        screen.blit(screen_text, screen_pos)
+        text_num = text_num+1
+
+        text = f"総合スコア: {total_score}"
+        print(text)
+        screen_text = font.render(text, True, WHITE)
+        screen_pos = (10, SIZE+FONT_SIZE*text_num)
+        screen.blit(screen_text, screen_pos)
+        text_num = text_num+1
+
+
 
     # ステージ情報を取得
     def get_stage(self, stage_num,Param):
@@ -431,6 +685,12 @@ class SampleObject:
             stage_num=stage_num,
             Param=Param
         )
+        self.get_epicenter(self.stage)
+
+    def get_epicenter(self, stage):
+        self.get_stage = DefineEpicenter.get_stage_data(stage.stage_data)
+        self.epicenter_line = DefineEpicenter.calcrate_line(self.get_stage)
+        self.epicenter_area = DefineEpicenter.calcrate_area(self.get_stage)
 
     def read_config(self):
         path = Path("../Config") / f"building_config.json"
@@ -521,7 +781,7 @@ class StageSelect:
 
         text = "STAGE" + str(stage_num)
 
-        screen_text = default_font.render(text, True, WHITE)
+        screen_text = font.render(text, True, WHITE)
         screen_pos = (HOR_SIZE//2, FONT_SIZE)
         screen.blit(screen_text, screen_pos)
 
@@ -573,5 +833,6 @@ def main():
 if __name__ == "__main__":
     main()
 
+# TODO: ステージ作成
 # TODO: 地震の発生しうる場所を描画（）
 # TODO: シミュレーションの結果を表示（描画の切り替え）(write_text 関数の書き換え)

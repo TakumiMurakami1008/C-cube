@@ -9,8 +9,8 @@
     },
     "epicenter_distribution": {
         "line_segment": {
-            "start": [32.0, 135.0],
-            "end": [34.0, 140.0]
+            "start": [32.0, 130.0],
+            "end": [33.0, 133.0]
         },
         "covariance_along_line": 1.0,
         "covariance_perpendicular": 0.5,
@@ -31,21 +31,35 @@
     "terrain": [
         {
             "type": "海",
-            "area": [[0, 1], [0, 1]],
+            "area": [[0, 0.5], [0, 1]],
             "weakness": 0.9,
             "disaster_risk": "津波",
             "ground_type": "軟弱地盤"
         },
         {
+            "type": "埋立地",
+            "area": [[0.5, 0.7], [0.3, 0.7]],
+            "weakness": 0.7,
+            "disaster_risk": "液状化",
+            "ground_type": "沖積層"
+        },
+        {
+            "type": "台地",
+            "area": [[0.0, 0.3], [0.0, 0.7]],
+            "weakness": 0.7,
+            "disaster_risk": "地割れ",
+            "ground_type": "沖積層"
+        },
+        {
             "type": "平地",
-            "area": [[0.3, 0.7], [0.3, 0.7]],
+            "area": [[0.3, 0.5], [0.0, 0.7]],
             "weakness": 0.7,
             "disaster_risk": "液状化",
             "ground_type": "沖積層"
         },
         {
             "type": "山",
-            "area": [[0.7, 1], [0.7, 1]],
+            "area": [[0.0, 0.5], [0.7, 1]],
             "weakness": 0.5,
             "disaster_risk": "土砂災害",
             "ground_type": "岩盤"

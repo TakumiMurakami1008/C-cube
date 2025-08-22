@@ -9,14 +9,14 @@ import main  # Panelクラスを使うため
 
 
 class PanelManager:
-    def __init__(self, stage_data):
+    def __init__(self, stage_data, panel_origin=[]):
         self.tile_width = stage_data["map_settings"]["grid_size"]["width"]
         self.tile_height = stage_data["map_settings"]["grid_size"]["height"]
         self.panels_list = None
         self.panels = None
-        self._set_panels(stage_data=stage_data)
+        self._set_panels(stage_data=stage_data, panel_origin=panel_origin)
 
-    def _set_panels(self, stage_data=None):
+    def _set_panels(self, stage_data, panel_origin=[]):
         if stage_data is None:
             raise ValueError("stage_data が指定されていません。")
 
@@ -56,17 +56,26 @@ class PanelManager:
 
             for x in range(x0, x1):
                 for y in range(y0, y1):
-                    building_type = 0
-                    building_strength = 0
                     shaking = 0
-
-                    panel = main.Panel(
-                        building_type=building_type,
-                        building_strength=building_strength,
-                        shaking=shaking,
-                        ground_strength=ground_strength,
-                        terrain_type=terrain_type
-                    )
+                    if len(panel_origin) != 0 and panel_origin[x][y].building_type != 0:
+                            # パネルがすでに設定されている場合は、地形情報を更新
+                            panel = main.Panel(
+                                building_type=panel_origin[x][y].building_type,
+                                building_strength=panel_origin[x][y].building_strength,
+                                shaking=shaking,
+                                ground_strength=ground_strength,
+                                terrain_type=terrain_type
+                            )
+                    else:
+                        building_type = 0
+                        building_strength = 0
+                        panel = main.Panel(
+                            building_type=building_type,
+                            building_strength=building_strength,
+                            shaking=shaking,
+                            ground_strength=ground_strength,
+                            terrain_type=terrain_type
+                        )
                     panels_array[x, y] = panel
 
         # 未設定パネルをデフォルト値で初期化
