@@ -3,6 +3,9 @@ import sys
 import json
 from pathlib import Path
 
+import numpy as np
+import matplotlib.pyplot as plt
+
 from dataclasses import dataclass
 from DefineEpicenter_copy import DefineEpicenter
 import DefineMagnitude
@@ -253,6 +256,11 @@ class SampleObject:
                             dt=0.05 #定数(上げると地震の広がる規模が大きくなる)
                         )
                     max_disp = sim.run(steps=200) #揺れの大きの最大値を持つ配列（step数を上げると地震の広がる規模が大きくなる）​
+
+                    # plt.imshow(max_disp.T, origin='lower', cmap='hot', interpolation='nearest')
+                    # plt.colorbar()
+                    # plt.savefig("../Debug_folder/max_disp.png", dpi=150, bbox_inches='tight')
+
                     # print(f"self.stage.panel: {self.stage.panel},\nlength:{len(self.stage.panel)}")
                     pane = PanelManager.PanelManager(
                         panel_origin = self.stage.panel,
@@ -262,8 +270,6 @@ class SampleObject:
                     pane_result = pane.simulate(max_disp=max_disp)
 
                     self.stage.panel = pane_result
-
-                    print("aaaaa")
 
                     self.write_text(Param)
                     self.field_switcth = 0

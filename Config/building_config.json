@@ -1,17 +1,17 @@
 {
   "0": {
     "name": "民家",
-    "strength": 0.2,
+    "strength": 7.0,
     "score": 100
   },
   "1": {
     "name": "商業ビル",
-    "strength": 0.4,
+    "strength": 10.0,
     "score": 500
   },
   "2": {
     "name": "発電所",
-    "strength": 0.5,
+    "strength": 15.0,
     "score": 2000
   }
 }

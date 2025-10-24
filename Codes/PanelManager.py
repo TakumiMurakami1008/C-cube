@@ -105,7 +105,7 @@ class PanelManager:
                 panel.shaking = shaking
 
                 # 耐震性: 建物の強さ × 地盤の強さ × 係数
-                alpha = 0.5
+                alpha = 10.0 # 調整用係数
                 resistance = panel.building_strength * panel.ground_strength * alpha
 
                 # 建物あり & 揺れ > 耐震性 → 壊れる
