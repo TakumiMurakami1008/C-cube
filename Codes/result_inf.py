@@ -50,24 +50,25 @@ def calc_building_stats(pane_result, building_config_path):
     # スコア計算用リスト
     buildings = []
 
-    for i in range(len(pane_result)):
-        for j in range(len(pane_result[i])):
-            panel = pane_result[i][j]
-            building_type = panel.building_type
+    for x in range(len(pane_result)):
+        for y in range(len(pane_result[x])):
+            panel = pane_result[x][y]
+            building_id = panel.building_type
             building_strength = panel.building_strength
-            
-            if building_type == -1: # 建物がないパネルはスキップ
+
+            if building_id == -1: # 建物がないパネルはスキップ
                 continue
             else:
                 if building_strength == -1: # 倒壊している場合
-                    collapse_count[building_type] += 1
+                    collapse_count[building_id] += 1
                 else: # 生存している場合
-                    survive_count[building_type] += 1
+                    survive_count[building_id] += 1
+            # print(f"Building ID: {building_id}, Strength: {building_strength}")
 
             # スコア計算用に情報を追加
-            if building_type > 0:
+            if building_id > 0:
                 buildings.append({
-                    "score": building_config[str(building_type -1)]["score"],
+                    "score": building_config[str(building_id -1)]["score"],
                     "building_strength": building_strength
                 })
 
@@ -84,5 +85,5 @@ def calc_building_stats(pane_result, building_config_path):
 
     # collapse_count, survive_countをリストで返す
     # return collapse_count, survive_count, total_score
-    return max(collapse_count), max(survive_count), total_score
+    return sum(collapse_count), sum(survive_count), total_score
 
