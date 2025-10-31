@@ -538,6 +538,7 @@ class SampleObject:
                 if self.is_obj(x,y,i):
                     print("select")
                     print(x,y)
+                    # 建物オブジェクトを選択
                     if self.obj[i].pos_x == x and self.obj[i].pos_y == y:
                         self.select_obj_num = self.obj[i].num
                         print(self.select_obj_num)
@@ -569,7 +570,7 @@ class SampleObject:
 
         if can_put:
             print("put")
-            print(x,y)
+            print(f"x: {x}, y: {y}")
             
             # self. board[x][y] = BLACK
 
@@ -584,10 +585,11 @@ class SampleObject:
             self.obj[self.select_obj_num].pos_y = y
 
             # TODO: ファイルから読みだした建物パラメータを設定
-            print(self.select_obj_num)
+            print(f"self.select_obj_num: {self.select_obj_num}, name: {self.obj[self.select_obj_num].name}")
             if self.obj[self.select_obj_num].name == "民家":
                 self.stage.panel[x][y].building_type = 0
                 self.stage.panel[x][y].building_strength = 0.5
+                print(f"(x,y):{(x,y)}, Set building_type: {self.stage.panel[x][y].building_type}")
             elif self.obj[self.select_obj_num].name == "商業ビル":
                 self.stage.panel[x][y].building_type = 1
                 self.stage.panel[x][y].building_strength = 0.7
@@ -687,7 +689,7 @@ class SampleObject:
 
 
     # ステージ情報を取得
-    def get_stage(self, stage_num,Param):
+    def get_stage(self, stage_num, Param):
         self.stage = SampleStage(
             stage_num=stage_num,
             Param=Param
@@ -817,7 +819,7 @@ def main():
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_RETURN:
                     window = 1 # 建物配置画面へ移行
-                    game.get_stage(stage_select.stage_num, param) # ゲーム側にステージ情報を渡す
+                    game.get_stage(stage_num=stage_select.stage_num, Param=param) # ゲーム側にステージ情報を渡す
                     param.set_stage_num(stage_select.stage_num) # ステージ番号を設定
                     screen.fill(BLACK) #画面全体を塗りつぶす
 

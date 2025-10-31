@@ -57,7 +57,7 @@ class PanelManager:
             for x in range(x0, x1):
                 for y in range(y0, y1):
                     shaking = 0
-                    if len(panel_origin) != 0 and panel_origin[x][y].building_type != 0:
+                    if panel_origin is not None and len(panel_origin) > 0:
                             # パネルがすでに設定されている場合は、地形情報を更新
                             panel = main.Panel(
                                 building_type=panel_origin[x][y].building_type,
@@ -104,7 +104,7 @@ class PanelManager:
                 shaking = max_disp[x, y]
                 panel.shaking = shaking
 
-                if panel.building_type <= 0:
+                if panel.building_type < 0:
                     # 建物なしパネルはスキップ
                     self.panels[x, y] = panel
                     continue
@@ -114,7 +114,7 @@ class PanelManager:
                 resistance = panel.building_strength * panel.ground_strength * alpha
 
                 # 建物あり & 揺れ > 耐震性 → 壊れる
-                if panel.building_type > 0 and shaking > resistance:
+                if shaking > resistance:
                     panel.building_strength = -1
 
                 self.panels[x, y] = panel
@@ -122,22 +122,22 @@ class PanelManager:
         return self.panels
 
     # 結果を計算する関数
-    def calculate_result(self):
-        total_score = 0
-        building_scores = {
-            0: 100,   # 民家
-            1: 500,   # 商業ビル
-            2: 2000   # 発電所
-        }
+    # def calculate_result(self):
+    #     total_score = 0
+    #     building_scores = {
+    #         0: 100,   # 民家
+    #         1: 500,   # 商業ビル
+    #         2: 2000   # 発電所
+    #     }
 
-        for x in range(self.tile_width):
-            for y in range(self.tile_height):
-                panel = self.panels[x, y]
-                if panel.building_type > 0 and panel.building_strength >= 0:
-                    score = building_scores.get(panel.building_type, 0)
-                    total_score += score
+    #     for x in range(self.tile_width):
+    #         for y in range(self.tile_height):
+    #             panel = self.panels[x, y]
+    #             if panel.building_type >= 0 and panel.building_strength >= 0:
+    #                 score = building_scores.get(panel.building_type, 0)
+    #                 total_score += score
 
-        return total_score
+    #     return total_score
 
     # デバッグ用出力関数
     def showPanelState(self, output_path="../Debug_folder/show_panel_state.json", show_limit=5):
