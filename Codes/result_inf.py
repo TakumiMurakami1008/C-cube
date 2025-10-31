@@ -55,15 +55,13 @@ def calc_building_stats(pane_result, building_config_path):
             panel = pane_result[i][j]
             building_type = panel.building_type
             building_strength = panel.building_strength
-            # 建物がないパネルはスキップ
-            # print(building_type)
-            if building_type == 0:
+            
+            if building_type == -1: # 建物がないパネルはスキップ
                 continue
-            if building_strength == -1:
-                if building_type < 0:
-                    collapse_count[building_type] += 1
             else:
-                if building_type < 0:
+                if building_strength == -1: # 倒壊している場合
+                    collapse_count[building_type] += 1
+                else: # 生存している場合
                     survive_count[building_type] += 1
 
             # スコア計算用に情報を追加

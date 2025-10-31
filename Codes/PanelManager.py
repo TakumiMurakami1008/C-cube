@@ -67,7 +67,7 @@ class PanelManager:
                                 terrain_type=terrain_type
                             )
                     else:
-                        building_type = 0
+                        building_type = -1 # 建物なし
                         building_strength = 0
                         panel = main.Panel(
                             building_type=building_type,
@@ -104,6 +104,11 @@ class PanelManager:
                 shaking = max_disp[x, y]
                 panel.shaking = shaking
 
+                if panel.building_type <= 0:
+                    # 建物なしパネルはスキップ
+                    self.panels[x, y] = panel
+                    continue
+
                 # 耐震性: 建物の強さ × 地盤の強さ × 係数
                 alpha = 10.0 # 調整用係数
                 resistance = panel.building_strength * panel.ground_strength * alpha
@@ -120,9 +125,9 @@ class PanelManager:
     def calculate_result(self):
         total_score = 0
         building_scores = {
-            1: 100,   # 民家
-            2: 500,   # 商業ビル
-            3: 2000   # 発電所
+            0: 100,   # 民家
+            1: 500,   # 商業ビル
+            2: 2000   # 発電所
         }
 
         for x in range(self.tile_width):

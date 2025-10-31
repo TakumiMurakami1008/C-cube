@@ -583,15 +583,16 @@ class SampleObject:
             self.obj[self.select_obj_num].pos_x = x
             self.obj[self.select_obj_num].pos_y = y
 
+            # TODO: ファイルから読みだした建物パラメータを設定
             print(self.select_obj_num)
             if self.obj[self.select_obj_num].name == "民家":
-                self.stage.panel[x][y].building_type = 1
+                self.stage.panel[x][y].building_type = 0
                 self.stage.panel[x][y].building_strength = 0.5
             elif self.obj[self.select_obj_num].name == "商業ビル":
-                self.stage.panel[x][y].building_type = 2
+                self.stage.panel[x][y].building_type = 1
                 self.stage.panel[x][y].building_strength = 0.7
             elif self.obj[self.select_obj_num].name == "発電所":
-                self.stage.panel[x][y].building_type = 3
+                self.stage.panel[x][y].building_type = 2
                 self.stage.panel[x][y].building_strength = 1.0
             else:
                 print(f"error: obj_num={self.select_obj_num}")
