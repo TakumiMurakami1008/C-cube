@@ -86,4 +86,3 @@ def calc_building_stats(pane_result, building_config_path):
     # collapse_count, survive_countをリストで返す
     # return collapse_count, survive_count, total_score
     return sum(collapse_count), sum(survive_count), total_score
-
