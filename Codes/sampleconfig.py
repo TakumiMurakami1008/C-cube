@@ -2,6 +2,7 @@ import pygame
 import sys
 import json
 from pathlib import Path
+import random
 
 import numpy as np
 import matplotlib.pyplot as plt
@@ -272,6 +273,15 @@ class SampleObject:
                     self.stage.panel = pane_result
 
                     self.write_text(Param)
+
+                    #ガチャ要素(作りかけ)
+                    with open("../Config/item_config.json", "r", encoding="utf-8") as f:
+                        items = json.load(f)
+                    for i in range(10):
+                        result = self.draw_gacha(items)
+                        if result:
+                            print(f"{i+1}回目: {result['rarity']} {result['name']}")
+
                     self.field_switcth = 0
 
             if event.key == pygame.K_f:
@@ -709,6 +719,24 @@ class SampleObject:
                 map_settings = building["map_settings"]
                 self.latitiude = building["latitude_range"] 
                 self.longtitude = building["longitude_range"]
+
+    #ガチャ要素(作りかけ)
+    def draw_gacha(self,items):
+    # 所有していないアイテムだけを対象にする
+        available_items = [item for item in items if not item["owned"]]
+        
+        if not available_items:
+            print("すべてのアイテムを所有しています！")
+            return None
+        
+        prize = random.choice(available_items)
+        prize["owned"] = True  # 所有フラグをTrueにする
+        
+        # JSONを更新して保存
+        with open("../Config/item_config.json", "w", encoding="utf-8") as f:
+            json.dump(items, f, indent=4, ensure_ascii=False)
+    
+        return prize
 
 # ステージ選択画面
 class StageSelect:

@@ -1,8 +1,10 @@
+# 次回TODO: プレイヤーの建物アンロック状況、建物等画像の用意
+
 import numpy as np
 import os
 import matplotlib.pyplot as plt
 
-class EQSimulatorVariableRho:
+class TsunamiSimulatorVariableRho:
     def __init__(self, epicenter, magnitude, grid_shape, rho_map, dx=1.0, dt=0.1, mu=1.0, damping_width=1, save_frames=False):
         self.grid_shape = grid_shape
         self.nx, self.ny = grid_shape
@@ -107,7 +109,7 @@ if __name__ == "__main__":
         tile_width = map_data["tile_width"] 
         tile_height = map_data["tile_width"] 
     
-    sim = EQSimulatorVariableRho(
+    sim = TsunamiSimulatorVariableRho(
             epicenter=(2, 5), #震源​
             magnitude=10, #地震の規模​
             grid_shape= (tile_width, tile_height),
