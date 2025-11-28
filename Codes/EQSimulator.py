@@ -84,10 +84,50 @@ class EQSimulatorVariableRho:
         # 内部領域だけ返す
         return self.u_max[1:-1, 1:-1]
 
+    # パネル情報の更新（シミュレーション実行後の呼び出しを想定）
+    def update_panels(self, panel_manager):
+        """
+            シミュレーション結果に基づき、パネルの揺れ情報と建物の耐震判定を更新する
+            
+            Parameters:
+                panel_manager (PanelManager): パネル管理オブジェクト
 
+            Returns:
+                panel_manager: 更新後のパネル情報を持つPanelManagerオブジェクト
+        """
+        max_disp = self.u_max[1:-1, 1:-1]
+        panels = panel_manager.get_all_panels()
 
-### デバッグ用
+        if max_disp.shape != (panel_manager.tile_width, panel_manager.tile_height):
+            raise ValueError(
+                f"max_disp のサイズが一致しません。期待: ({panel_manager.tile_width}, {panel_manager.tile_height})\n実際: {max_disp.shape}"
+            )
+        
+        for x in range(panel_manager.tile_width):
+            for y in range(panel_manager.tile_height):
+                panel = panels[x, y]
+                shaking = max_disp[x, y]
+                panel.shaking = shaking
 
+                if panel.building_type < 0:
+                    # 建物なしパネルはスキップ
+                    panels[x, y] = panel
+                    continue
+
+                # 耐震性: 建物の強さ × 地盤の強さ × 係数
+                alpha = 10.0 # 調整用係数
+                resistance = panel.building_strength * panel.ground_strength * alpha
+
+                # 建物あり & 揺れ > 耐震性 → 壊れる
+                if shaking > resistance:
+                    panel.building_strength = -1
+
+                panels[x, y] = panel
+        
+        panel_manager.set_all_panels(panels)
+        return panel_manager
+
+## デバッグ用
 def make_video_from_frames(frame_dir="frames", output_path="simulation.mp4", fps=10):
     files = sorted([os.path.join(frame_dir, f) for f in os.listdir(frame_dir) if f.endswith(".png")])
     images = [imageio.imread(f) for f in files]

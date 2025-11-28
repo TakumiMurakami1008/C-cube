@@ -12,6 +12,8 @@ from DefineEpicenter_copy import DefineEpicenter
 import DefineMagnitude
 from DefineWeaknessMap import DefineWeaknessMap
 from EQSimulator import EQSimulatorVariableRho
+from DefinePermeabilityMap import DefinePermeabilityMap
+from TsunamiSimulator import TsunamiSimulatorVariableRho
 import PanelManager
 import result_inf
 
@@ -183,7 +185,7 @@ class SampleObject:
 
         self.show_result = False # シミュレーション結果を表示する状態かのフラグ
 
-        self.field_switcth = 0 # 震源地になる可能性のあるマスを表示する画面に切り替えるフラグ
+        self.field_switch = 0 # 震源地になる可能性のあるマスを表示する画面に切り替えるフラグ
 
     # def update(self, event, obj_catch):
     def update(self, event, Param):
@@ -228,14 +230,16 @@ class SampleObject:
                     with open(f"../Config/map_sample{stage_num}_config.json", "r", encoding="utf-8_sig") as f:
                         stage_data = json.load(f)
 
+                    pane = PanelManager.PanelManager(
+                        panel_origin = self.stage.panel,
+                        stage_data=stage_data# ステージのコンフィグファイル
+                    )
+
                     # 震源地を決める関数
                     epicenter = DefineEpicenter.define_epicenter(
                         self.epicenter_line, 
                         self.get_stage
                     )
-                    # epicenter = DefineEpicenter.DefineEpicenter.define_epicenter(
-                    #     stage_data = stage_data # ステージのコンフィグファイル
-                    # )
 
                     # マグニチュードを決める関数
                     magnitude = DefineMagnitude.DefineMagnitude.define_magnitude(
@@ -248,27 +252,43 @@ class SampleObject:
                     weakness_map = weakness_map_creator.get_weakness_map()
 
                     sim = EQSimulatorVariableRho(
-                            epicenter=epicenter, #震源​
-                            magnitude=magnitude, #地震の規模​
-                            grid_shape= (Param.tile_width, Param.tile_height), #マップのグリッド情報
-                            rho_map = weakness_map, #地盤の脆さ
-                            # rho_map=np.ones((grid_width, grid_height)), #地盤密度を持つ配列​
-                            mu=10.0, #弾性係数​（定数）
-                            dt=0.05 #定数(上げると地震の広がる規模が大きくなる)
-                        )
-                    max_disp = sim.run(steps=200) #揺れの大きの最大値を持つ配列（step数を上げると地震の広がる規模が大きくなる）​
-
+                        epicenter=epicenter, #震源​
+                        magnitude=magnitude, #地震の規模​
+                        grid_shape= (Param.tile_width, Param.tile_height), #マップのグリッド情報
+                        rho_map = weakness_map, #地盤の脆さ
+                        # rho_map=np.ones((grid_width, grid_height)), #地盤密度を持つ配列​
+                        mu=10.0, #弾性係数​（定数）
+                        dt=0.05 #定数(上げると地震の広がる規模が大きくなる)
+                    )
+                    sim.run(steps=200) #揺れの大きの最大値を持つ配列（step数を上げると地震の広がる規模が大きくなる）​
+                    pane = sim.update_panels(panel_manager=pane)
                     # plt.imshow(max_disp.T, origin='lower', cmap='hot', interpolation='nearest')
                     # plt.colorbar()
                     # plt.savefig("../Debug_folder/max_disp.png", dpi=150, bbox_inches='tight')
 
                     # print(f"self.stage.panel: {self.stage.panel},\nlength:{len(self.stage.panel)}")
-                    pane = PanelManager.PanelManager(
-                        panel_origin = self.stage.panel,
-                        stage_data=stage_data# ステージのコンフィグファイル
-                    )
+
                     # パネル情報（建物の破壊・非破壊）を更新
-                    pane_result = pane.simulate(max_disp=max_disp)
+                    pane_result = pane.get_all_panels()
+
+                    # 津波シミュレーション
+                    #波の伝わりやすさを決める関数
+                    permeability_map_creator = DefinePermeabilityMap(
+                        stage_data = stage_data
+                    )
+                    permeability_map = permeability_map_creator.get_permeability_map()
+
+                    sim_tsunami = TsunamiSimulatorVariableRho(
+                        epicenter=epicenter, #震源​
+                        magnitude=magnitude, #地震の規模​
+                        grid_shape= (Param.tile_width, Param.tile_height), #マップのグリッド情報
+                        rho_map = permeability_map, #地盤の脆さ
+                        # rho_map=np.ones((grid_width, grid_height)), #地盤密度を持つ配列​
+                        mu=10.0, #弾性係数​（定数）
+                        dt=0.05 #定数(上げると地震の広がる規模が大きくなる)
+                    )
+                    # 波の最大値（評価用）
+                    max_wave = sim_tsunami.run(steps=200)
 
                     self.stage.panel = pane_result
 
@@ -282,20 +302,20 @@ class SampleObject:
                         if result:
                             print(f"{i+1}回目: {result['rarity']} {result['name']}")
 
-                    self.field_switcth = 0
+                    self.field_switch = 0
 
             if event.key == pygame.K_f:
                 # self.get_stage = DefineEpicenter.get_stage_data(self.stage.stage_data)
                 # self.epicenter_line = DefineEpicenter.calcrate_line(self.get_stage)
                 # self.epicenter_area = DefineEpicenter.calcrate_area(self.get_stage)
-                if self.field_switcth == 0:
-                    self.field_switcth = 1
-                elif self.field_switcth == 1:
-                    self.field_switcth = 0
+                if self.field_switch == 0:
+                    self.field_switch = 1
+                elif self.field_switch == 1:
+                    self.field_switch = 0
 
         # self.draw_board(Param)
 
-        match self.field_switcth:
+        match self.field_switch:
             case 0:
                 self.draw_board(Param)
 

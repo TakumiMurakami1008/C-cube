@@ -7,6 +7,7 @@
         "latitude_range": "[30, 45]",
         "longitude_range": "[130, 145]"
     },
+    "weather": "Sunny",
     "building_settings": {
         "0": {
             "max_count": 5
@@ -53,6 +54,7 @@
             "type": "海",
             "area": [[0, 0.2], [0, 0.2]],
             "weakness": 0.9,
+            "permeability": 1.0,
             "disaster_risk": "津波",
             "ground_type": "軟弱地盤"
         },
@@ -60,6 +62,7 @@
             "type": "海",
             "area": [[0.4, 1], [0, 0.2]],
             "weakness": 0.9,
+            "permeability": 1.0,
             "disaster_risk": "津波",
             "ground_type": "軟弱地盤"
         },
@@ -67,6 +70,7 @@
             "type": "埋立地",
             "area": [[0.2, 0.4], [0, 0.2]],
             "weakness": 0.8,
+            "permeability": 0.7,
             "disaster_risk": "液状化",
             "ground_type": "人工地盤"
         },
@@ -74,6 +78,7 @@
             "type": "三角州",
             "area": [[0.3, 0.6], [0.2, 0.4]],
             "weakness": 0.7,
+            "permeability": 0.75,
             "disaster_risk": "液状化",
             "ground_type": "沖積層"
         },
@@ -81,6 +86,7 @@
             "type": "川",
             "area": [[0.4, 0.5], [0.2, 1]],
             "weakness": 0.7,
+            "permeability": 0.8,
             "disaster_risk": "氾濫",
             "ground_type": "軟弱地盤"
         },
@@ -88,6 +94,7 @@
             "type": "台地",
             "area": [[0.8, 1], [0.6, 0.8]],
             "weakness": 0.7,
+            "permeability": 0.4,
             "disaster_risk": "地割れ",
             "ground_type": "沖積層"
         },    
@@ -95,6 +102,7 @@
             "type": "平地",
             "area": [[0, 0.3], [0.2, 0.8]],
             "weakness": 0.7,
+            "permeability": 0.6,
             "disaster_risk": "液状化",
             "ground_type": "洪積層"
         },
@@ -102,6 +110,7 @@
             "type": "平地",
             "area": [[0.3, 0.4], [0.4, 0.8]],
             "weakness": 0.7,
+            "permeability": 0.6,
             "disaster_risk": "液状化",
             "ground_type": "洪積層"
         },
@@ -109,6 +118,7 @@
             "type": "平地",
             "area": [[0.6, 1], [0.2, 0.4]],
             "weakness": 0.7,
+            "permeability": 0.6,
             "disaster_risk": "液状化",
             "ground_type": "洪積層"
         },
@@ -116,6 +126,7 @@
             "type": "平地",
             "area": [[0.5, 1], [0.4, 0.6]],
             "weakness": 0.7,
+            "permeability": 0.6,
             "disaster_risk": "液状化",
             "ground_type": "洪積層"
         },
@@ -123,6 +134,7 @@
             "type": "平地",
             "area": [[0.5, 0.8], [0.6, 0.8]],
             "weakness": 0.7,
+            "permeability": 0.6,
             "disaster_risk": "液状化",
             "ground_type": "洪積層"
         },        
@@ -130,6 +142,7 @@
             "type": "山地",
             "area": [[0, 0.4], [0.8, 1]],
             "weakness": 0.5,
+            "permeability": 0.2,
             "disaster_risk": "土砂災害",
             "ground_type": "岩盤"
         },
@@ -137,6 +150,7 @@
             "type": "山地",
             "area": [[0.5, 1], [0.8, 1]],
             "weakness": 0.5,
+            "permeability": 0.2,
             "disaster_risk": "土砂災害",
             "ground_type": "岩盤"
         }
