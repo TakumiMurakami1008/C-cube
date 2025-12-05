@@ -30,6 +30,7 @@ class Panel: #パネル
     building_type: int         # 建物の種類（例 0: なし, 1: 家, 2: ビル, ...）
     building_strength: float   # 建物がある場合、建物の強度（0~1）、-1の場合壊れている建物とする
     shaking: float             # 受けた地震の揺れの大きさ（例：加速度や震度）
+    waving: float              # 受けた津波の波の大きさ（例：波の高さ、勢い）
     ground_strength: float     # 地盤の強さ（0〜1などで表現）
     terrain_type: str          # 地形情報（例："hill", "plain", "coast", etc.）
 

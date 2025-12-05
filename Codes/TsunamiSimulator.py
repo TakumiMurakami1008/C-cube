@@ -93,6 +93,48 @@ class TsunamiSimulatorVariableRho:
                 self.save_frame(step, output_dir)
         return self.u_max[1:-1, 1:-1]
 
+    # パネル情報の更新（シミュレーション実行後の呼び出しを想定）
+    def update_panels(self, panel_manager):
+        """
+            シミュレーション結果に基づき、パネルの波の大きさ情報と建物の倒壊判定を更新する
+            
+            Parameters:
+                panel_manager (PanelManager): パネル管理オブジェクト
+
+            Returns:
+                panel_manager: 更新後のパネル情報を持つPanelManagerオブジェクト
+        """
+        max_wave = self.u_max[1:-1, 1:-1]
+        panels = panel_manager.get_all_panels()
+
+        if max_wave.shape != (panel_manager.tile_width, panel_manager.tile_height):
+            raise ValueError(
+                f"max_wave のサイズが一致しません。期待: ({panel_manager.tile_width}, {panel_manager.tile_height})\n実際: {max_wave.shape}"
+            )
+        
+        for x in range(panel_manager.tile_width):
+            for y in range(panel_manager.tile_height):
+                panel = panels[x, y]
+                waving = max_wave[x, y]
+                panel.waving = waving
+
+                if panel.building_type < 0:
+                    # 建物なしパネルはスキップ
+                    panels[x, y] = panel
+                    continue
+
+                # 耐震性: 建物の強さ × 地盤の強さ × 係数
+                alpha = 5.0 # 調整用係数
+                resistance = panel.building_strength * alpha
+
+                # 建物あり & 揺れ > 耐震性 → 壊れる
+                if waving > resistance:
+                    panel.building_strength = -1
+
+                panels[x, y] = panel
+        
+        panel_manager.set_all_panels(panels)
+        return panel_manager
 
 
 ### 動画作成（地震コードと同じ）

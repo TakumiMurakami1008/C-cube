@@ -14,6 +14,7 @@ from DefineWeaknessMap import DefineWeaknessMap
 from EQSimulator import EQSimulatorVariableRho
 from DefinePermeabilityMap import DefinePermeabilityMap
 from TsunamiSimulator import TsunamiSimulatorVariableRho
+from LandslideSimulator import LandslideSimulator
 import PanelManager
 import result_inf
 
@@ -123,17 +124,20 @@ class Panel:
     # has_building: bool         # 建物の有無
     # building_strength: float   # 建物がある場合、建物の強度（0~1）、-1の場合壊れている建物とする
     # shaking: float             # 地震の揺れの大きさ（例：加速度や震度）
+    # waving: float　　　　　　　 # 津波の波の大きさ（例：波の高さ、勢い）
     # ground_strength: float     # 地盤の強さ（0〜1などで表現）
     # terrain_type: str          # 地形情報（例："hill", "plain", "coast", etc.）
     building_type: int         # 建物の種類（例 0: なし, 1: 家, 2: ビル, ...）
     building_strength: float   # 建物がある場合、建物の強度（0~1）、-1の場合壊れている建物とする
     shaking: float             # 受けた地震の揺れの大きさ（例：加速度や震度）
+    waving: float              # 受けた津波の波の大きさ（例：波の高さ、勢い）
     ground_strength: float     # 地盤の強さ（0〜1などで表現）
     terrain_type: str          # 地形情報（例："hill", "plain", "coast", etc.）
-    def __init__(self, building_type, building_strength, shaking, ground_strength, terrain_type):
+    def __init__(self, building_type, building_strength, shaking, waving, ground_strength, terrain_type):
         self.building_type = building_type
         self.building_strength = building_strength
         self.shaking = shaking
+        self.waving = waving
         self.ground_strength = ground_strength
         self.terrain_type = terrain_type
 
@@ -176,6 +180,10 @@ class SampleObject:
 
         self.obj = [None] * MAX_OBJECT
 
+        # ▼▼▼ 追加: アイテム設定ファイルの確認と生成 ▼▼▼
+        #self.ensure_item_config() 
+        # ▲▲▲ 追加終わり ▲▲▲
+
         self.set_obj_param(Param)
         # self.set_field()
 
@@ -186,6 +194,26 @@ class SampleObject:
         self.show_result = False # シミュレーション結果を表示する状態かのフラグ
 
         self.field_switch = 0 # 震源地になる可能性のあるマスを表示する画面に切り替えるフラグ
+
+    # ▼▼▼ 新規追加: 設定ファイルがない場合にデフォルトを作成するメソッド ▼▼▼
+    #def ensure_item_config(self):
+        #config_path = Path("../Config/item_config.json")
+        #if not config_path.exists():
+            #print("item_config.json が見つからないため、デフォルトを作成します。")
+            # デフォルトのアイテムデータ
+            #default_items = [
+                #{"name": "耐震ダンパー", "rarity": "SR", "owned": False},
+                #{"name": "非常食セット", "rarity": "N", "owned": False},
+                #{"name": "高性能発電機", "rarity": "SSR", "owned": False},
+                #{"name": "簡易トイレ", "rarity": "N", "owned": False},
+                #{"name": "補強材(鉄骨)", "rarity": "R", "owned": False},
+            #]
+            # ディレクトリがない場合は作成（念のため）
+            #config_path.parent.mkdir(parents=True, exist_ok=True)
+            
+            #with open(config_path, "w", encoding="utf-8") as f:
+                #json.dump(default_items, f, indent=4, ensure_ascii=False)
+    # ▲▲▲ 新規追加終わり ▲▲▲
 
     # def update(self, event, obj_catch):
     def update(self, event, Param):
@@ -235,6 +263,7 @@ class SampleObject:
                         stage_data=stage_data# ステージのコンフィグファイル
                     )
 
+                    # ===== 地震シミュ =====
                     # 震源地を決める関数
                     epicenter = DefineEpicenter.define_epicenter(
                         self.epicenter_line, 
@@ -251,7 +280,7 @@ class SampleObject:
                     )
                     weakness_map = weakness_map_creator.get_weakness_map()
 
-                    sim = EQSimulatorVariableRho(
+                    sim_EQ = EQSimulatorVariableRho(
                         epicenter=epicenter, #震源​
                         magnitude=magnitude, #地震の規模​
                         grid_shape= (Param.tile_width, Param.tile_height), #マップのグリッド情報
@@ -260,18 +289,11 @@ class SampleObject:
                         mu=10.0, #弾性係数​（定数）
                         dt=0.05 #定数(上げると地震の広がる規模が大きくなる)
                     )
-                    sim.run(steps=200) #揺れの大きの最大値を持つ配列（step数を上げると地震の広がる規模が大きくなる）​
-                    pane = sim.update_panels(panel_manager=pane)
-                    # plt.imshow(max_disp.T, origin='lower', cmap='hot', interpolation='nearest')
-                    # plt.colorbar()
-                    # plt.savefig("../Debug_folder/max_disp.png", dpi=150, bbox_inches='tight')
+                    shaking_map = sim_EQ.run(steps=200) #揺れの大きの最大値を持つ配列（step数を上げると地震の広がる規模が大きくなる）​
+                    pane = sim_EQ.update_panels(panel_manager=pane)
+                    # pane_result = pane.get_all_panels() # パネル情報（建物の破壊・非破壊）を更新
 
-                    # print(f"self.stage.panel: {self.stage.panel},\nlength:{len(self.stage.panel)}")
-
-                    # パネル情報（建物の破壊・非破壊）を更新
-                    pane_result = pane.get_all_panels()
-
-                    # 津波シミュレーション
+                    # ===== 津波シミュ =====
                     #波の伝わりやすさを決める関数
                     permeability_map_creator = DefinePermeabilityMap(
                         stage_data = stage_data
@@ -279,28 +301,54 @@ class SampleObject:
                     permeability_map = permeability_map_creator.get_permeability_map()
 
                     sim_tsunami = TsunamiSimulatorVariableRho(
-                        epicenter=epicenter, #震源​
-                        magnitude=magnitude, #地震の規模​
+                        wave_source=epicenter, #震源​
+                        wave_height=magnitude*1.5, #地震の規模​ 1.5は要調整
                         grid_shape= (Param.tile_width, Param.tile_height), #マップのグリッド情報
-                        rho_map = permeability_map, #地盤の脆さ
+                        spread_map = permeability_map, #地盤の脆さ
                         # rho_map=np.ones((grid_width, grid_height)), #地盤密度を持つ配列​
                         mu=10.0, #弾性係数​（定数）
                         dt=0.05 #定数(上げると地震の広がる規模が大きくなる)
                     )
-                    # 波の最大値（評価用）
-                    max_wave = sim_tsunami.run(steps=200)
+                    sim_tsunami.run(steps = 200)
+                    pane = sim_tsunami.update_panels(panel_manager=pane)
+                    # # 波の最大値（評価用）
+                    # max_wave = sim_tsunami.run(steps=200)
+                    # pane_result = pane.get_all_panels() # パネル情報（建物の破壊・非破壊）を更新    
+                    
+                    # ===== 土砂災害シミュ =====
+                    sim_landslide = LandslideSimulator(
+                        panel_manager = pane,
+                        stage_data = stage_data,
+                        damage_radius=2,
+                    )
+                    sim_landslide.run(panel_manager = pane, shaking_map = shaking_map)
+                    pane = sim_landslide.update_panels(panel_manager=pane)
+                    pane_result = pane.get_all_panels() # パネル情報（建物の破壊・非破壊）を更新    
 
+                    # ===== シミュ終了 =====
                     self.stage.panel = pane_result
-
                     self.write_text(Param)
 
-                    #ガチャ要素(作りかけ)
-                    with open("../Config/item_config.json", "r", encoding="utf-8") as f:
-                        items = json.load(f)
-                    for i in range(10):
-                        result = self.draw_gacha(items)
-                        if result:
-                            print(f"{i+1}回目: {result['rarity']} {result['name']}")
+                    # ガチャ要素
+                    try:
+                        with open("../Config/item_config.json", "r", encoding="utf-8") as f:
+                            data = json.load(f)
+                        items = data["items"]
+                    
+                        print("--- ガチャ開始 ---")
+                        for i in range(10):
+                            result = self.draw_gacha(items)
+                            if result:
+                                print(f"{i+1}回目: [{result['rarity']}] {result['name']} を獲得！")
+                            else:
+                                print(f"{i+1}回目: これ以上引けるアイテムがありません。")
+                                break # アイテム切れならループを抜ける
+                        print("--- ガチャ終了 ---")
+
+                    except FileNotFoundError:
+                        print("エラー: item_config.json が見つかりません。")
+                    except json.JSONDecodeError:
+                        print("エラー: item_config.json の中身が空か、形式が正しくありません。")
 
                     self.field_switch = 0
 

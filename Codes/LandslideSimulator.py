@@ -1,3 +1,6 @@
+## 土砂災害シミュレーター関数
+# - 雨天時、または一定以上の揺れがある場合に、山地から土砂崩れが発生
+# - 土砂崩れは一定半径内の平地や台地に被害を及ぼし、建物を破壊
 import math
 import random
 
@@ -10,7 +13,7 @@ class LandslideSimulator:
             damage_radius: 被害半径
             shaking_threshold: 土砂崩れが発生する震度（shaking）の閾値
         """
-        self.panel_manager = panel_manager
+        self.updated_panels = None
         self.tile_width = panel_manager.tile_width
         self.tile_height = panel_manager.tile_height
         self.damage_radius = damage_radius
@@ -26,15 +29,15 @@ class LandslideSimulator:
 
         # 防災施設（法面工事）とみなす建物ID
         # ※building_config.json にも追記が必要
-        self.PROTECTION_BUILDING_ID = 3 
+        self.PROTECTION_BUILDING_IDs = (1,3)  # 例: 1と3を法面工事とみなす
 
-    def run(self, shaking_map):
+    def run(self, panel_manager, shaking_map):
         """
         土砂災害シミュレーションを実行し、盤面を更新する
         Returns:
             int: 発生件数
         """
-        panels = self.panel_manager.get_all_panels()
+        panels = panel_manager.get_all_panels()
         landslide_sources = []
 
         # --- 1. 発生源の特定 ---
@@ -51,7 +54,7 @@ class LandslideSimulator:
                     continue
 
                 # 条件B: 防災施設（法面工事）がないこと
-                if panel.building_type == self.PROTECTION_BUILDING_ID:
+                if panel.building_type in self.PROTECTION_BUILDING_IDs:
                     continue
 
                 # 条件C: 発生トリガー（雨 または 一定以上の揺れ）
@@ -89,15 +92,30 @@ class LandslideSimulator:
                         if target_panel.building_type != -1:
                             # 既に倒壊していなければ
                             if target_panel.building_strength != -1:
-                                # 法面工事自体は壊れない設定
-                                if target_panel.building_type == self.PROTECTION_BUILDING_ID:
+                                # 法面工事されている場合は壊れない設定
+                                if target_panel.building_type in self.PROTECTION_BUILDING_IDs:
                                     continue
                                 
-                                # 強制倒壊
+                                # 倒壊
                                 target_panel.building_strength = -1
                                 affected_count += 1
-                                # ログなど（必要であれば）
-                                # print(f"土砂崩れ被害: ({tx}, {ty})")
+                                # print(f"土砂崩れ被害発生: ({tx}, {ty})")
+                        panels[tx, ty] = target_panel
+        
+        self.updated_panels = panels
+        return affected_count
 
-        print(f"土砂災害レポート: 天気={self.weather}, 発生源={len(landslide_sources)}箇所, 被害建物={affected_count}棟")
-        return len(landslide_sources)
+    # パネル情報の更新（シミュレーション実行後の呼び出しを想定）
+    def update_panels(self, panel_manager):
+        """
+            シミュレーション結果に基づき、パネルの情報を更新する
+            
+            Parameters:
+                panel_manager (PanelManager): パネル管理オブジェクト
+                panels: 更新後のパネル情報の2D配列
+
+            Returns:
+                panel_manager: 更新後のパネル情報を持つPanelManagerオブジェクト
+        """
+        panel_manager.set_all_panels(self.updated_panels)
+        return panel_manager

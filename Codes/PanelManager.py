@@ -12,6 +12,7 @@ import main  # Panelクラスを使うため
 #     building_type: int         # 建物の種類（例 0: なし, 1: 家, 2: ビル, ...）
 #     building_strength: float   # 建物がある場合、建物の強度（0~1）、-1の場合壊れている建物とする
 #     shaking: float             # 受けた地震の揺れの大きさ（例：加速度や震度）
+#     waving: float              # 受けた津波の波の大きさ（例：波の高さ、勢い）
 #     ground_strength: float     # 地盤の強さ（0〜1などで表現）
 #     terrain_type: str          # 地形情報（例："hill", "plain", "coast", etc.）
 
@@ -65,12 +66,14 @@ class PanelManager:
             for x in range(x0, x1):
                 for y in range(y0, y1):
                     shaking = 0
+                    waving = 0
                     if panel_origin is not None and len(panel_origin) > 0:
                             # パネルがすでに設定されている場合は、地形情報を更新
                             panel = main.Panel(
                                 building_type=panel_origin[x][y].building_type,
                                 building_strength=panel_origin[x][y].building_strength,
                                 shaking=shaking,
+                                waving=waving,
                                 ground_strength=ground_strength,
                                 terrain_type=terrain_type
                             )
@@ -81,6 +84,7 @@ class PanelManager:
                             building_type=building_type,
                             building_strength=building_strength,
                             shaking=shaking,
+                            waving=waving,
                             ground_strength=ground_strength,
                             terrain_type=terrain_type
                         )
@@ -94,6 +98,7 @@ class PanelManager:
                         building_type=-1,
                         building_strength=0.0,
                         shaking=0.0,
+                        waving=0.0,
                         ground_strength=0.5,
                         terrain_type="不明"
                     )
