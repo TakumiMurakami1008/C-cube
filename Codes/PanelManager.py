@@ -7,6 +7,15 @@ import ast  # 文字列を安全にPythonオブジェクトに変換するため
 
 import main  # Panelクラスを使うため
 
+# @dataclass
+# class Panel: #パネル
+#     building_type: int         # 建物の種類（例 0: なし, 1: 家, 2: ビル, ...）
+#     building_strength: float   # 建物がある場合、建物の強度（0~1）、-1の場合壊れている建物とする
+#     shaking: float             # 受けた地震の揺れの大きさ（例：加速度や震度）
+#     waving: float              # 受けた津波の波の大きさ（例：波の高さ、勢い）
+#     ground_strength: float     # 地盤の強さ（0〜1などで表現）
+#     terrain_type: str          # 地形情報（例："hill", "plain", "coast", etc.）
+
 
 class PanelManager:
     def __init__(self, stage_data, panel_origin=[]):
@@ -57,12 +66,14 @@ class PanelManager:
             for x in range(x0, x1):
                 for y in range(y0, y1):
                     shaking = 0
+                    waving = 0
                     if panel_origin is not None and len(panel_origin) > 0:
                             # パネルがすでに設定されている場合は、地形情報を更新
                             panel = main.Panel(
                                 building_type=panel_origin[x][y].building_type,
                                 building_strength=panel_origin[x][y].building_strength,
                                 shaking=shaking,
+                                waving=waving,
                                 ground_strength=ground_strength,
                                 terrain_type=terrain_type
                             )
@@ -73,6 +84,7 @@ class PanelManager:
                             building_type=building_type,
                             building_strength=building_strength,
                             shaking=shaking,
+                            waving=waving,
                             ground_strength=ground_strength,
                             terrain_type=terrain_type
                         )
@@ -83,61 +95,44 @@ class PanelManager:
             for y in range(h):
                 if panels_array[x, y] is None:
                     panels_array[x, y] = main.Panel(
-                        building_type=0,
+                        building_type=-1,
                         building_strength=0.0,
                         shaking=0.0,
+                        waving=0.0,
                         ground_strength=0.5,
                         terrain_type="不明"
                     )
 
         self.panels = panels_array
 
-    def simulate(self, max_disp):
-        if max_disp.shape != (self.tile_width, self.tile_height):
-            raise ValueError(
-                f"max_disp のサイズが一致しません。期待: ({self.tile_width}, {self.tile_height})\n実際: {max_disp.shape}"
-            )
-
-        for x in range(self.tile_width):
-            for y in range(self.tile_height):
-                panel = self.panels[x, y]
-                shaking = max_disp[x, y]
-                panel.shaking = shaking
-
-                if panel.building_type < 0:
-                    # 建物なしパネルはスキップ
-                    self.panels[x, y] = panel
-                    continue
-
-                # 耐震性: 建物の強さ × 地盤の強さ × 係数
-                alpha = 10.0 # 調整用係数
-                resistance = panel.building_strength * panel.ground_strength * alpha
-
-                # 建物あり & 揺れ > 耐震性 → 壊れる
-                if shaking > resistance:
-                    panel.building_strength = -1
-
-                self.panels[x, y] = panel
-
-        return self.panels
-
-    # 結果を計算する関数
-    # def calculate_result(self):
-    #     total_score = 0
-    #     building_scores = {
-    #         0: 100,   # 民家
-    #         1: 500,   # 商業ビル
-    #         2: 2000   # 発電所
-    #     }
+    # def simulate(self, max_disp):
+    #     if max_disp.shape != (self.tile_width, self.tile_height):
+    #         raise ValueError(
+    #             f"max_disp のサイズが一致しません。期待: ({self.tile_width}, {self.tile_height})\n実際: {max_disp.shape}"
+    #         )
 
     #     for x in range(self.tile_width):
     #         for y in range(self.tile_height):
     #             panel = self.panels[x, y]
-    #             if panel.building_type >= 0 and panel.building_strength >= 0:
-    #                 score = building_scores.get(panel.building_type, 0)
-    #                 total_score += score
+    #             shaking = max_disp[x, y]
+    #             panel.shaking = shaking
 
-    #     return total_score
+    #             if panel.building_type < 0:
+    #                 # 建物なしパネルはスキップ
+    #                 self.panels[x, y] = panel
+    #                 continue
+
+    #             # 耐震性: 建物の強さ × 地盤の強さ × 係数
+    #             alpha = 10.0 # 調整用係数
+    #             resistance = panel.building_strength * panel.ground_strength * alpha
+
+    #             # 建物あり & 揺れ > 耐震性 → 壊れる
+    #             if shaking > resistance:
+    #                 panel.building_strength = -1
+
+    #             self.panels[x, y] = panel
+
+    #     return self.panels
 
     # デバッグ用出力関数
     def showPanelState(self, output_path="../Debug_folder/show_panel_state.json", show_limit=5):
@@ -179,6 +174,9 @@ class PanelManager:
     # パネルを取得する関数
     def get_all_panels(self):
         return self.panels
+    
+    def set_all_panels(self, panels):
+        self.panels = panels
 
     def get_panel(self, x, y):
         if 0 <= x < self.tile_width and 0 <= y < self.tile_height:

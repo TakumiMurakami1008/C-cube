@@ -22,19 +22,19 @@
     ],
     "items":[
         {
-            "name": "ドラゴンソード",
-            "rarity": "★5",
-            "owned": true
+            "name": "堤防ブロック",
+            "rarity": "2",
+            "owned": false
         },
         {
-            "name": "ナイトシールド",
-            "rarity": "★4",
-            "owned": true
+            "name": "震度感知型・自動消火装置",
+            "rarity": "4",
+            "owned": false
         },
         {
-            "name": "メイジスタッフ",
-            "rarity": "★4",
-            "owned": true
+            "name": "対浸水用建材",
+            "rarity": "3",
+            "owned": false
         }
 
     ]

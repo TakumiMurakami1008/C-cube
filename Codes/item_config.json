@@ -1,0 +1,101 @@
+[
+    {
+        "id": 1,
+        "name": "地域の安全を考えるおばさん",
+        "rarity": "N",
+        "description": "井戸端会議ネットワークで地域の防災意識を底上げする。わずかに被害を抑える。",
+        "effect_type": "defense_buff",
+        "effect_value": 1.05,
+        "owned": false
+    },
+    {
+        "id": 2,
+        "name": "防災ヘルメット",
+        "rarity": "N",
+        "description": "基本の防災グッズ。住民の生存率が少し上がる。",
+        "effect_type": "survival_rate",
+        "effect_value": 1.1,
+        "owned": false
+    },
+    {
+        "id": 3,
+        "name": "非常用持ち出し袋",
+        "rarity": "N",
+        "description": "避難生活を支えるセット。評価スコアが少し加算される。",
+        "effect_type": "score_bonus",
+        "effect_value": 50,
+        "owned": false
+    },
+    {
+        "id": 4,
+        "name": "ハザードマップ最新版",
+        "rarity": "R",
+        "description": "危険箇所を周知徹底する。被害判定が少し有利になる。",
+        "effect_type": "avoidance_rate",
+        "effect_value": 0.1,
+        "owned": false
+    },
+    {
+        "id": 5,
+        "name": "耐震補強材",
+        "rarity": "R",
+        "description": "建物の柱や壁を補強する。建物の強度が上がる。",
+        "effect_type": "building_strength_up",
+        "effect_value": 1.2,
+        "owned": false
+    },
+    {
+        "id": 6,
+        "name": "巨大堤防",
+        "rarity": "SR",
+        "description": "沿岸部にそびえ立つ巨大な壁。津波や浸水の被害を大幅に軽減する。",
+        "effect_type": "water_defense",
+        "effect_value": 0.5,
+        "owned": false
+    },
+    {
+        "id": 7,
+        "name": "高性能AI防災システム",
+        "rarity": "SR",
+        "description": "AIが避難経路を最適化する。全体のスコアが大幅にアップする。",
+        "effect_type": "score_multiplier",
+        "effect_value": 1.5,
+        "owned": false
+    },
+    {
+        "id": 8,
+        "name": "免震タワーマンション",
+        "rarity": "SSR",
+        "description": "揺れを吸収する最新鋭のマンション。この建物は震度7でも倒壊しない。",
+        "effect_type": "invincible_building",
+        "effect_value": 1.0,
+        "owned": false
+    },
+    {
+        "id": 9,
+        "name": "地下核シェルター",
+        "rarity": "SSR",
+        "description": "あらゆる災害から身を守る究極の避難所。特定のエリアの被害をゼロにする。",
+        "effect_type": "area_protection",
+        "effect_value": 100,
+        "owned": false
+    },
+    {
+        "id": 10,
+        "name": "気象コントロール衛星",
+        "rarity": "UR",
+        "description": "宇宙から気象を操作し、災害のエネルギーそのものを減衰させる。",
+        "effect_type": "magnitude_reduction",
+        "effect_value": 0.8,
+        "owned": false
+    },
+    {
+        "id": 11,
+        "name": "土地神",
+        "rarity": "UR",
+        "description": "神の力により、地域の安全を守る",
+        "effect_type": "All protection",
+        "effect_value": 100,
+        "owned": false
+    }
+]
