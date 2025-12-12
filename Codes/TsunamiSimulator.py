@@ -156,7 +156,7 @@ if __name__ == "__main__":
     # 波の伝わりやすさ（均一）
     spread = np.ones((tile_width, tile_height)) * 1.0
 
-    sim = TsunamiSimulator(
+    sim = TsunamiSimulatorVariableRho(
         wave_source=(25, 25),   # 津波発生地点（中央）
         wave_height=5.0,        # 初期波高
         grid_shape=(tile_width, tile_height),

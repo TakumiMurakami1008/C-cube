@@ -57,6 +57,10 @@ class LandslideSimulator:
                 if panel.building_type in self.PROTECTION_BUILDING_IDs:
                     continue
 
+                if panel.item_id != -1: # TODO:土砂災害防止アイテムがある場合はスキップ
+                    if panel.item_id == -1:  # 土砂災害防止アイテムID
+                        continue
+
                 # 条件C: 発生トリガー（雨 または 一定以上の揺れ）
                 is_raining = (self.weather == "Rain")
                 current_shaking = shaking_map[x, y]

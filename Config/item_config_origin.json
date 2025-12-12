@@ -1,20 +1,20 @@
 [
     {
         "id": 1,
-        "name": "地域の安全を考えるおばさん",
-        "rarity": "N",
-        "description": "井戸端会議ネットワークで地域の防災意識を底上げする。わずかに被害を抑える。",
-        "effect_type": "defense_buff",
-        "effect_value": 1.05,
+        "name": "耐震補強材",
+        "rarity": "R",
+        "description": "建物の柱や壁を補強する。建物の強度が上がる。",
+        "effect_type": "building_strength_up",
+        "effect_value": 1.2,
         "owned": false
     },
     {
         "id": 2,
-        "name": "防災ヘルメット",
-        "rarity": "N",
-        "description": "基本の防災グッズ。住民の生存率が少し上がる。",
-        "effect_type": "survival_rate",
-        "effect_value": 1.1,
+        "name": "巨大堤防",
+        "rarity": "SR",
+        "description": "沿岸部にそびえ立つ巨大な壁。津波や浸水の被害を大幅に軽減する。",
+        "effect_type": "water_defense",
+        "effect_value": 0.5,
         "owned": false
     },
     {
@@ -37,20 +37,20 @@
     },
     {
         "id": 5,
-        "name": "耐震補強材",
-        "rarity": "R",
-        "description": "建物の柱や壁を補強する。建物の強度が上がる。",
-        "effect_type": "building_strength_up",
-        "effect_value": 1.2,
+        "name": "地域の安全を考えるおばさん",
+        "rarity": "N",
+        "description": "井戸端会議ネットワークで地域の防災意識を底上げする。わずかに被害を抑える。",
+        "effect_type": "defense_buff",
+        "effect_value": 1.05,
         "owned": false
     },
     {
         "id": 6,
-        "name": "巨大堤防",
-        "rarity": "SR",
-        "description": "沿岸部にそびえ立つ巨大な壁。津波や浸水の被害を大幅に軽減する。",
-        "effect_type": "water_defense",
-        "effect_value": 0.5,
+        "name": "防災ヘルメット",
+        "rarity": "N",
+        "description": "基本の防災グッズ。住民の生存率が少し上がる。",
+        "effect_type": "survival_rate",
+        "effect_value": 1.1,
         "owned": false
     },
     {

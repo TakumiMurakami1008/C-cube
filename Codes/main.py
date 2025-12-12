@@ -33,6 +33,13 @@ class Panel: #パネル
     waving: float              # 受けた津波の波の大きさ（例：波の高さ、勢い）
     ground_strength: float     # 地盤の強さ（0〜1などで表現）
     terrain_type: str          # 地形情報（例："hill", "plain", "coast", etc.）
+    item_id: int             # パネルに設置されているアイテムのID（-1ならなし）
+
+@dataclass
+class Player: #プレイヤー
+    score: int                 # スコア
+    position: Coordinate       # 位置（座標）
+    health: float              # 健康状態（0~1などで表現）
 
 
 

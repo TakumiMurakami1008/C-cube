@@ -15,6 +15,7 @@ import main  # Panelクラスを使うため
 #     waving: float              # 受けた津波の波の大きさ（例：波の高さ、勢い）
 #     ground_strength: float     # 地盤の強さ（0〜1などで表現）
 #     terrain_type: str          # 地形情報（例："hill", "plain", "coast", etc.）
+#     item_id: int             # パネルに設置されているアイテムのID（-1ならなし）
 
 
 class PanelManager:
@@ -75,7 +76,8 @@ class PanelManager:
                                 shaking=shaking,
                                 waving=waving,
                                 ground_strength=ground_strength,
-                                terrain_type=terrain_type
+                                terrain_type=terrain_type,
+                                item_id=panel_origin[x][y].item_id
                             )
                     else:
                         building_type = -1 # 建物なし
@@ -86,7 +88,8 @@ class PanelManager:
                             shaking=shaking,
                             waving=waving,
                             ground_strength=ground_strength,
-                            terrain_type=terrain_type
+                            terrain_type=terrain_type,
+                            item_id=-1
                         )
                     panels_array[x, y] = panel
 
@@ -100,7 +103,8 @@ class PanelManager:
                         shaking=0.0,
                         waving=0.0,
                         ground_strength=0.5,
-                        terrain_type="不明"
+                        terrain_type="不明",
+                        item_id=-1
                     )
 
         self.panels = panels_array

@@ -116,6 +116,12 @@ class EQSimulatorVariableRho:
 
                 # 耐震性: 建物の強さ × 地盤の強さ × 係数
                 alpha = 10.0 # 調整用係数
+
+                # アイテム効果の適用
+                if panel.item_id != -1:
+                    if panel.item_id == 1:  # 耐震補強アイテム
+                            alpha *= 1.2 # 耐震性20%向上
+                
                 resistance = panel.building_strength * panel.ground_strength * alpha
 
                 # 建物あり & 揺れ > 耐震性 → 壊れる

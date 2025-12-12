@@ -86,7 +86,7 @@ class Param:
             self.tile_width = map_data["tile_width"] 
             self.tile_height = map_data["tile_height"] 
 
-        if self.tile_width == self.tile_height:
+        if self.tile_width == self.tile_heightf:
             self.tile_num = self.tile_width
         else:
             if self.tile_width < self.tile_height:
@@ -296,7 +296,8 @@ class SampleObject:
                     # ===== 津波シミュ =====
                     #波の伝わりやすさを決める関数
                     permeability_map_creator = DefinePermeabilityMap(
-                        stage_data = stage_data
+                        stage_data = stage_data,
+                        panel_manager = pane
                     )
                     permeability_map = permeability_map_creator.get_permeability_map()
 
